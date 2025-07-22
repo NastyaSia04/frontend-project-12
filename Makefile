@@ -12,7 +12,7 @@ build:
 		rd /s /q frontend\dist
 		npm run build
 deploy:
-		git push heroku main
+		git push render main
 develop:
 		start cmd /k "make start-backend"
 		start cmd /k "make start-frontend"
