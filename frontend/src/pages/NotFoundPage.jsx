@@ -10,3 +10,5 @@ const NotFoundPage = () => {
 }
 
 export default NotFoundPage
+
+//адрес картинки src="https://cdn.hexlet.io/assets/error-page/not-found.svg"
