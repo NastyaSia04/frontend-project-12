@@ -1,6 +1,5 @@
 import axios from 'axios'
-
-const BASE_URL = '/api/v1'
+import { BASE_URL } from '../config'
 
 export const login = async (username, password) => {
   const response = await axios.post(`${BASE_URL}/login`, {
