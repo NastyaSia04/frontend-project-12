@@ -1,7 +1,7 @@
 import { Field, Form, Formik } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import { login } from '../api/auth'
-import { Container, Row, Col, Form as BootstrapForm, Button, Alert, Card } from 'react-bootstrap'
+import { Container, Navbar, Form as BootstrapForm, Button, Alert } from 'react-bootstrap'
  
 const LoginPage = () => {
   const navigate = useNavigate() //useNavigate позволяет программно переходить по маршрутам, как будто пользователь кликнул по ссылке:
@@ -24,83 +24,94 @@ const LoginPage = () => {
   }
   
   return (
-    <Container fluid className='h-100'>
-      <Row className='justify-content-center align-content-center h-100'>
-        <Col xs={12} md={8} xxl={6}>
-          <Card className='shadow-sm'>
-            <Card.Body className='row p-5'>
-              {/* Левая колонка с аватаркой */}
-              <Col md={6} className='d-flex align-items-center justify-content-center'>
-                <img
-                  src='/assets/avatar-DIE1AEpS.jpg'
-                  className='rounded-circle'
-                  alt='Войти'
-                />
-              </Col>
+    <div className='h-100 bg-light'>
+      <div className='d-flex flex-column h-100' id='chat'>
+        {/* Навбар (полное соответствие демо) */}
+        <Navbar bg='white' className='shadow-sm' expand='lg'>
+          <Container>
+            <Navbar.Brand href='/'>Hexlet Chat</Navbar.Brand>
+            <button type='button' className='btn btn-primary'>Выйти</button>
+          </Container>
+        </Navbar>
 
-              {/* Правая колонка с формой */}
-              <Col md={6}>
-                <h1 className='text-center mb-4'>Войти</h1>
-                <Formik
-                  initialValues={{ username: '', password: '' }}
-                  onSubmit={handleSubmit}
-                >
-                  {({ status, isSubmitting }) => (
-                    <Form className='form'>
-                      <BootstrapForm.Group className='form-floating mb-3' controlId='username'>
-                        <Field
-                          as={BootstrapForm.Control}
-                          type='text'
-                          name='username'
-                          id='username'
-                          placeholder='Ваш ник'
-                          autoComplete='username'
-                          required
-                          className='form-control'
-                        />
-                        <BootstrapForm.Label>Ваш ник</BootstrapForm.Label>
-                      </BootstrapForm.Group>
+        {/* Основное содержимое */}
+        <div className='container-fluid h-100'>
+          <div className='row justify-content-center align-content-center h-100'>
+            <div className='col-12 col-md-8 col-xxl-6'>
+              <div className='card shadow-sm'>
+                <div className='card-body row p-5'>
+                  {/* Левая колонка с аватаркой */}
+                  <div className='col-12 col-md-6 d-flex align-items-center justify-content-center'>
+                    <img
+                      src='/assets/avatar-DIE1AEpS.jpg'
+                      className='rounded-circle'
+                      alt='Войти'
+                    />
+                  </div>
 
-                      <BootstrapForm.Group className='form-floating mb-4' controlId='password'>
-                        <Field
-                          as={BootstrapForm.Control}
-                          type='password'
-                          name='password'
-                          id='password'
-                          placeholder='Пароль'
-                          autoComplete='current-password'
-                          required
-                          className='form-control'
-                        />
-                        <BootstrapForm.Label>Пароль</BootstrapForm.Label>
-                      </BootstrapForm.Group>
+                  {/* Правая колонка с формой */}
+                  <div className='col-12 col-md-6 mt-3 mt-md-0'>
+                    <h1 className='text-center mb-4'>Войти</h1>
+                    <Formik
+                      initialValues={{ username: '', password: '' }}
+                      onSubmit={handleSubmit}
+                    >
+                      {({ status, isSubmitting }) => (
+                        <Form>
+                          <BootstrapForm.Group className='form-floating mb-3'>
+                            <Field
+                              as={BootstrapForm.Control}
+                              type='text'
+                              name='username'
+                              id='username'
+                              placeholder='Ваш ник'
+                              autoComplete='username'
+                              required
+                            />
+                            <BootstrapForm.Label>Ваш ник</BootstrapForm.Label>
+                          </BootstrapForm.Group>
 
-                      {status && <Alert variant='danger'>{status}</Alert>}
+                          <BootstrapForm.Group className='form-floating mb-4'>
+                            <Field
+                              as={BootstrapForm.Control}
+                              type='password'
+                              name='password'
+                              id='password'
+                              placeholder='Пароль'
+                              autoComplete='current-password'
+                              required
+                            />
+                            <BootstrapForm.Label>Пароль</BootstrapForm.Label>
+                          </BootstrapForm.Group>
 
-                      <Button
-                        type='submit'
-                        variant='outline-primary'
-                        className='w-100 mb-3'
-                        disabled={isSubmitting}
-                      >
-                        Войти
-                      </Button>
-                    </Form>
-                  )}
-                </Formik>
-              </Col>
-            </Card.Body>
+                          {status && <Alert variant='danger'>{status}</Alert>}
 
-            <Card.Footer className='p-4'>
-              <div className='text-center'>
-                <span>Нет аккаунта? </span>
-                <a href='/signup'>Регистрация</a>
+                          <Button
+                            type='submit'
+                            variant='outline-primary'
+                            className='w-100 mb-3'
+                            disabled={isSubmitting}
+                          >
+                            Войти
+                          </Button>
+                        </Form>
+                      )}
+                    </Formik>
+                  </div>
+                </div>
+
+                <div className='card-footer p-4'>
+                  <div className='text-center'>
+                    <span>Нет аккаунта? </span>
+                    <a href='/signup'>Регистрация</a>
+                  </div>
+                </div>
               </div>
-            </Card.Footer>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
