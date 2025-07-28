@@ -26,7 +26,7 @@ const LoginPage = () => {
   return (
     <div className='h-100 bg-light'>
       <div className='d-flex flex-column h-100' id='chat'>
-        {/* Навбар (полное соответствие демо) */}
+        {/* Навбар */}
         <Navbar bg='white' className='shadow-sm' expand='lg'>
           <Container>
             <Navbar.Brand href='/'>Hexlet Chat</Navbar.Brand>
