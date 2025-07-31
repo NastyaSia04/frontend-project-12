@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
-import channelsReducer from './channelsSlice'
-import messagesReducer from './messagesSlice'
+import channelsReducer from './entities/channelsSlice'
+import messagesReducer from './entities/messagesSlice'
 
 const store = configureStore({
   reducer: {
@@ -9,4 +9,4 @@ const store = configureStore({
   }
 })
 
-export default store
+export default store //НА УДАЛЕНИЕ

@@ -28,4 +28,4 @@ export const {
   setError
 } = messagesSlice.actions
 
-export default messagesSlice.reducer
+export default messagesSlice.reducer //НА УДАЛЕНИЕ
