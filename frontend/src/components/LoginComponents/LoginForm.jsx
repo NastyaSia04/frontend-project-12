@@ -1,11 +1,13 @@
 import React from 'react'
 import { Formik, Form, Field } from 'formik'
 import { Form as BootstrapForm, Button, Alert } from 'react-bootstrap'
+import loginSchema from '../../utils/validation/loginSchema'
 
 const LoginForm = ({ onSubmit }) => (
   <Formik
     initialValues={{ username: '', password: '' }}
     onSubmit={onSubmit}
+    validationSchema={loginSchema}
   >
     {({ status, isSubmitting }) => (
       <Form>

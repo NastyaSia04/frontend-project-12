@@ -33,4 +33,4 @@ export const {
   setError, 
 } = channelsSlice.actions
 
-export default channelsSlice.reducer //НА УДАЛЕНИЕ
+export default channelsSlice.reducer
