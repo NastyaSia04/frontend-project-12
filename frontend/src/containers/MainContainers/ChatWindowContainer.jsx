@@ -8,6 +8,7 @@ import MessageInput from '../../components/MainComponents/MessageInput'
 import { fetchChannels } from '../../api/channels'
 import { fetchMessages } from '../../api/messages'
 import { setChannels } from '../../store/entities/channelsSlice'
+import { setCurrentChannelId } from '../../store/entities/channelsSlice'
 import { setMessages } from '../../store/entities/messagesSlice'
 
 const ChatWindowContainer = () => {
@@ -25,6 +26,11 @@ const ChatWindowContainer = () => {
       try {
         const channelsData = await fetchChannels()
         dispatch(setChannels(channelsData))
+        // Найдём канал с именем 'general'
+        const generalChannel = channelsData.find((c) => c.name === 'general')
+        if (generalChannel) {
+          dispatch(setCurrentChannelId(generalChannel.id))
+        }
 
         const messagesData = await fetchMessages()
         dispatch(setMessages(messagesData))
