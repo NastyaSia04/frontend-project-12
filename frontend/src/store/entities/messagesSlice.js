@@ -19,13 +19,17 @@ const messagesSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload
     },
+    addMessage: (state, action) => {
+      state.list.push(action.payload)
+    }
   },
 })
 
 export const {
   setMessages,
   setLoading,
-  setError
+  setError,
+  addMessage,
 } = messagesSlice.actions
 
-export default messagesSlice.reducer //НА УДАЛЕНИЕ
+export default messagesSlice.reducer

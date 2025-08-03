@@ -9,16 +9,20 @@ import { fetchChannels } from '../../api/channels'
 import { fetchMessages } from '../../api/messages'
 import { setChannels } from '../../store/entities/channelsSlice'
 import { setCurrentChannelId } from '../../store/entities/channelsSlice'
-import { setMessages } from '../../store/entities/messagesSlice'
+import { setMessages, addMessage } from '../../store/entities/messagesSlice'
+import useApi from '../../hooks/useApi'
 
 const ChatWindowContainer = () => {
   const dispatch = useDispatch()
   const [message, setMessage] = useState('')
 
+  const { sendMessage, socket } = useApi()
+
   const messages = useSelector((state) => state.messages.list)
   const currentChannel = useSelector((state) =>
     state.channels.list.find((c) => c.id === state.channels.currentChannelId)
   )
+  const username = useSelector((state) => state.user.username)
 
   // добавляем useEffect для начальной загрузки
   useEffect(() => {
@@ -42,12 +46,42 @@ const ChatWindowContainer = () => {
     fetchData()
   }, [dispatch])
 
-  const handleSubmit = (e) => {
+  // Слушаем входящие сообщения через socket
+  useEffect(() => {
+    if (!socket) return
+
+    const handleNewMessage = (payload) => {
+      dispatch(addMessage(payload))
+    }
+
+    socket.on('newMessage', (payload) => {
+      handleNewMessage(payload)
+    })
+
+    // Очистка слушателя при размонтировании
+    return () => {
+      socket.off('newMessage', handleNewMessage)
+    }
+  }, [socket, dispatch])
+  
+  // логика отправки сообщения
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!message.trim()) return
-    // логика отправки сообщения будет позже
-    console.log('Сообщение:', message)
-    setMessage('')
+
+    const messageData = {
+      body: message,
+      channelId: currentChannel.id,
+      username,
+    }
+
+    try {
+      await sendMessage(messageData)
+      setMessage('')
+    } catch (error) {
+      console.error('Ошибка при отправке сообщения:', error)
+      // Здесь можно добавить уведомление пользователю, что отправка не удалась
+    }
   }
 
   return (
