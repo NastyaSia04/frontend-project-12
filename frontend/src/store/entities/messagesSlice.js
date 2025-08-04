@@ -21,7 +21,7 @@ const messagesSlice = createSlice({
     },
     addMessage: (state, action) => {
       state.list.push(action.payload)
-    }
+    },
   },
 })
 

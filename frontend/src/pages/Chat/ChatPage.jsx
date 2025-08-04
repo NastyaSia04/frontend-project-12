@@ -3,6 +3,7 @@ import Navbar from '../../components/SharedComponents/Navbar'
 import ChannelsPanelContainer from '../../containers/MainContainers/ChannelsPanelContainer'
 import ChatWindowContainer from '../../containers/MainContainers/ChatWindowContainer'
 import { ApiProvider } from '../../context/ApiContext'
+import ModalRoot from '../../containers/MainContainers/ModalRoot'
 
 const ChatPage = () => {
   const handleLogout = () => {
@@ -36,6 +37,7 @@ const ChatPage = () => {
           </div>
         </div>
       </div>
+    <ModalRoot/>
     </ApiProvider>
   )
 }

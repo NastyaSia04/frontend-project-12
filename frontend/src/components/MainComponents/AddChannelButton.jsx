@@ -1,12 +1,12 @@
 import React from 'react'
 import { PlusSquare } from 'react-bootstrap-icons'
 
-const AddChannelButton = ({ onclick }) => (
+const AddChannelButton = ({ onClick }) => (
   <button
     type='button'
     className='p-0 text-primary btn btn-group-vertical'
     aria-label='Добавить канал'
-    onClick={onclick}
+    onClick={onClick}
   >
     <PlusSquare size={20} />
     <span className='visually-hidden'>+</span>

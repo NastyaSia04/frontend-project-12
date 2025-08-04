@@ -8,7 +8,7 @@ import MessageInput from '../../components/MainComponents/MessageInput'
 import { fetchChannels } from '../../api/channels'
 import { fetchMessages } from '../../api/messages'
 import { setChannels } from '../../store/entities/channelsSlice'
-import { setCurrentChannelId } from '../../store/entities/channelsSlice'
+import { setCurrentChannelId, addChannel } from '../../store/entities/channelsSlice'
 import { setMessages, addMessage } from '../../store/entities/messagesSlice'
 import useApi from '../../hooks/useApi'
 
@@ -18,20 +18,26 @@ const ChatWindowContainer = () => {
 
   const { sendMessage, socket } = useApi()
 
-  const messages = useSelector((state) => state.messages.list)
+  // получаем currentChannelId для фильтрации сообщений
+  const currentChannelId = useSelector((state) => state.channels.currentChannelId)
   const currentChannel = useSelector((state) =>
-    state.channels.list.find((c) => c.id === state.channels.currentChannelId)
+    state.channels.list.find((c) => c.id === currentChannelId)
   )
   const username = useSelector((state) => state.user.username)
 
-  // добавляем useEffect для начальной загрузки
+  // фильтруем сообщения только для текущего канала
+  const messages = useSelector((state) =>
+    state.messages.list.filter((m) => m.channelId === currentChannelId)
+  )
+
+  // Загрузка каналов и сообщений при монтировании
   useEffect(() => {
     const fetchData = async () => {
       try {
         const channelsData = await fetchChannels()
         dispatch(setChannels(channelsData))
-        // Найдём канал с именем 'general'
-        const generalChannel = channelsData.find((c) => c.name === 'general')
+        // Если currentChannelId ещё не установлен, выбираем general
+        const generalChannel = channelsData.find((channel) => channel.name === 'general')
         if (generalChannel) {
           dispatch(setCurrentChannelId(generalChannel.id))
         }
@@ -54,13 +60,18 @@ const ChatWindowContainer = () => {
       dispatch(addMessage(payload))
     }
 
-    socket.on('newMessage', (payload) => {
-      handleNewMessage(payload)
-    })
+    // Слушаем добавление новых каналов через socket
+    const handleNewChannel = (payload) => {
+      dispatch(addChannel(payload))
+    }
+
+    socket.on('newMessage', handleNewMessage)
+    socket.on('newChannel', handleNewChannel)
 
     // Очистка слушателя при размонтировании
     return () => {
       socket.off('newMessage', handleNewMessage)
+      socket.off('newChannel', handleNewChannel)
     }
   }, [socket, dispatch])
   
