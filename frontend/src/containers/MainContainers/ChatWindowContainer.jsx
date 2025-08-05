@@ -8,7 +8,7 @@ import MessageInput from '../../components/MainComponents/MessageInput'
 import { fetchChannels } from '../../api/channels'
 import { fetchMessages } from '../../api/messages'
 import { setChannels } from '../../store/entities/channelsSlice'
-import { setCurrentChannelId, addChannel } from '../../store/entities/channelsSlice'
+import { setCurrentChannelId, addChannel, removeChannel } from '../../store/entities/channelsSlice'
 import { setMessages, addMessage } from '../../store/entities/messagesSlice'
 import useApi from '../../hooks/useApi'
 
@@ -65,13 +65,20 @@ const ChatWindowContainer = () => {
       dispatch(addChannel(payload))
     }
 
+    // Слушаем удаление каналов
+    const handleRemoveChannel = (payload) => {
+      dispatch(removeChannel(payload.id))
+    }
+
     socket.on('newMessage', handleNewMessage)
     socket.on('newChannel', handleNewChannel)
+    socket.on('removeChannel', handleRemoveChannel)
 
     // Очистка слушателя при размонтировании
     return () => {
       socket.off('newMessage', handleNewMessage)
       socket.off('newChannel', handleNewChannel)
+      socket.off('removeChannel', handleRemoveChannel)
     }
   }, [socket, dispatch])
   

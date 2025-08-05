@@ -1,13 +1,13 @@
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import AddModal from './AddModal'
+import RemoveModal from './RemoveModal'
 // import RenameModal from './RenameModal'
-// import RemoveModal from './RemoveModal'
 
 const modals = {
   add: AddModal,
+  remove: RemoveModal,
   //rename: RenameModal,
-  //remove: RemoveModal,
 }
 
 const ModalRoot = () => {

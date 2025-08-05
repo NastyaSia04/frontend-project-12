@@ -10,7 +10,7 @@ const ChannelsPanelContainer = () => {
   const channels = useSelector((state) => state.channels.list)
   const currentChannelId = useSelector((state) => state.channels.currentChannelId)
 
-  //  логика показа модалки
+  //  логика показа модалки добавления канала
   const handleAddChannel = () => {
     dispatch(openModal({ type: 'add' }))
   }
@@ -19,8 +19,12 @@ const ChannelsPanelContainer = () => {
     dispatch(setCurrentChannelId(channelId))
   }
 
+  // логика показа модалки удаления канала
   const handleRemove = (channelId) => {
-    console.log('Удалить канал', channelId)
+    dispatch(openModal({
+      type: 'remove',
+      extra: { channelId },
+    }))
   }
 
   const handleRename = (channelId, name) => {
@@ -43,8 +47,8 @@ const ChannelsPanelContainer = () => {
             currentChannelId={currentChannelId}
             removable={channel.removable} // по умолчанию канал не управляемый removable = false
             onClick={() => handleChannelClick(channel.id)}
-            onRemove={handleRemove}
-            onRename={handleRename}
+            onRemove={() => handleRemove(channel.id)}
+            onRename={() => handleRename(channel.id, channel.name)}
           />
         ))}  
       </ul>

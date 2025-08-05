@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -15,9 +15,11 @@ const AddModal = () => {
     (state) => state.channels.list.map((channel) => channel.name)
   )
 
-  const handleClose = () => dispatch(closeModal())
+  const handleClose = useCallback(() => {
+    dispatch(closeModal())
+  }, [dispatch])
 
-  const handleSubmit = (name) => {
+  const handleSubmit = useCallback((name) => {
     dispatch(addChannelAsync(name))
       .unwrap()
       .then(() => {
@@ -26,14 +28,18 @@ const AddModal = () => {
       .catch((err) => {
         console.error('Ошибка при добавлении канала:', err)
       })
-  }
+  }, [dispatch, handleClose])
 
   // Закрытие по Escape
   useEffect(() => {
-    const handleKey = (e) => e.key === 'Escape' && dispatch(closeModal())
+    const handleKey = (e) => {
+      if (e.key === 'Escape') {
+        handleClose()
+      }
+    }
     document.addEventListener('keydown', handleKey)
     return () => document.removeEventListener('keydown', handleKey)
-  }, [dispatch])
+  }, [handleClose])
 
   // Создание портала в body (вырисовывается поверх страницы) в конец body
   return createPortal(
