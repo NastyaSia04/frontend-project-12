@@ -1,35 +1,70 @@
-import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import AddChannelButton from '../../components/MainComponents/AddChannelButton'
-import ChannelButton from '../../components/MainComponents/ChannelButton'
-import { openModal } from '../../store/entities/uiSlice'
-import { setCurrentChannelId } from '../../store/entities/channelsSlice'
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import AddChannelButton from '../../components/MainComponents/AddChannelButton';
+import ChannelButton from '../../components/MainComponents/ChannelButton';
+import { openModal } from '../../store/entities/uiSlice';
+import { 
+  setCurrentChannelId,
+  selectChannels,
+  selectCurrentChannelId,
+} from '../../store/entities/channelsSlice';
+import { useChatApi } from '../../pages/Chat/ChatApi';
+import useApi from '../../hooks/useApi';
 
 const ChannelsPanelContainer = () => {
-  const dispatch = useDispatch()
-  const channels = useSelector((state) => state.channels.list)
-  const currentChannelId = useSelector((state) => state.channels.currentChannelId)
+  const dispatch = useDispatch();
+  const channels = useSelector(selectChannels);
+  const currentChannelId = useSelector(selectCurrentChannelId);
+  const { socket } = useApi();
+  const { 
+    setupChannelsHandlers,
+    getChannels
+  } = useChatApi(socket);
 
-  //  логика показа модалки добавления канала
+  // Настройка обработчиков каналов
+  useEffect(() => {
+    if (!socket) return;
+    
+    const cleanupChannels = setupChannelsHandlers();
+
+    // При подключении сокета загружаем каналы
+    const handleConnect = () => {
+      getChannels();
+    };
+
+    socket.on('connect', handleConnect);
+
+    return () => {
+      cleanupChannels();
+      socket.off('connect', handleConnect);
+    };
+  }, [socket, setupChannelsHandlers, getChannels]);
+
+  // UI обработчики (остаются без изменений)
   const handleAddChannel = () => {
-    dispatch(openModal({ type: 'add' }))
-  }
+    dispatch(openModal({ type: 'add' }));
+  };
 
   const handleChannelClick = (channelId) => {
-    dispatch(setCurrentChannelId(channelId))
-  }
+    dispatch(setCurrentChannelId(channelId));
+  };
 
-  // логика показа модалки удаления канала
   const handleRemove = (channelId) => {
     dispatch(openModal({
       type: 'remove',
       extra: { channelId },
-    }))
-  }
+    }));
+  };
 
-  const handleRename = (channelId, name) => {
-    console.log('Переименовать канал', channelId, name)
-  }
+  const handleRename = (channelId) => {
+    const channel = channels.find(c => c.id === channelId);
+    if (channel) {
+      dispatch(openModal({
+        type: 'rename',
+        extra: { channelId, currentName: channel.name },
+      }));
+    }
+  };
 
   return (
     <div className='col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex'>
@@ -42,18 +77,16 @@ const ChannelsPanelContainer = () => {
         {channels.map((channel) => (
           <ChannelButton
             key={channel.id}
-            id={channel.id}
-            name={channel.name}
+            channel={channel}
             currentChannelId={currentChannelId}
-            removable={channel.removable} // по умолчанию канал не управляемый removable = false
-            onClick={() => handleChannelClick(channel.id)}
-            onRemove={() => handleRemove(channel.id)}
-            onRename={() => handleRename(channel.id, channel.name)}
+            onClick={handleChannelClick}
+            onRemove={handleRemove}
+            onRename={handleRename}
           />
         ))}  
       </ul>
     </div>
-  )
-}
+  );
+};
 
-export default ChannelsPanelContainer
+export default ChannelsPanelContainer;

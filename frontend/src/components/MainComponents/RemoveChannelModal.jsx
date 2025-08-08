@@ -1,3 +1,5 @@
+import React from 'react'
+
 const RemoveChannelModal = ({ onConfirm, onCancel, isDeleting }) => (
   <>
     <p className='lead'>Уверены?</p>
@@ -16,7 +18,7 @@ const RemoveChannelModal = ({ onConfirm, onCancel, isDeleting }) => (
         onClick={onConfirm}
         disabled={isDeleting}
       >
-        Удалить
+        {isDeleting ? 'Удаление...' : 'Удалить'}
       </button>
     </div>
   </>

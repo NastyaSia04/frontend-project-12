@@ -1,8 +1,19 @@
 import React from 'react'
 import classNames from 'classnames'
 
-const ChannelButton = ({ id, name, currentChannelId,  onClick, removable = false, onRemove, onRename }) => {
-  const isActive = id === currentChannelId
+const ChannelButton = ({
+  channel,                // ✅ Изменено: теперь получаем весь объект канала
+  currentChannelId,
+  onClick,
+  onRemove,
+  onRename,
+}) => {
+  
+  console.log('ChannelButton props.channel:', channel);
+  const { id, name, removable } = channel; // ✅ Извлекаем нужные поля из объекта
+  const displayName = typeof name === 'object' && name !== null ? name.name : name; // 🔧 Унификация
+
+  const isActive = id === currentChannelId;
 
   const buttonClass = classNames(
     'w-100',
@@ -10,9 +21,9 @@ const ChannelButton = ({ id, name, currentChannelId,  onClick, removable = false
     'text-start',
     'btn',
     {
-      'btn-secondary': isActive, // активный канал
+      'btn-secondary': isActive,
     }
-  )
+  );
 
   const toggleClass = classNames(
     'flex-grow-0',
@@ -22,7 +33,7 @@ const ChannelButton = ({ id, name, currentChannelId,  onClick, removable = false
     {
       'btn-secondary': isActive,
     }
-  )
+  );
 
   if (!removable) {
     return (
@@ -30,12 +41,12 @@ const ChannelButton = ({ id, name, currentChannelId,  onClick, removable = false
         <button
           type='button'
           className={buttonClass}
-          onClick={onClick}
+          onClick={() => onClick(id)} // ✅ Передаём id
         >
-          <span className='me-1'>#</span>{name}
+          <span className='me-1'>#</span>{displayName}
         </button>
       </li>
-    )
+    );
   }
 
   return (
@@ -44,9 +55,9 @@ const ChannelButton = ({ id, name, currentChannelId,  onClick, removable = false
         <button
           type='button'
           className={buttonClass}
-          onClick={onClick}
+          onClick={() => onClick(id)} // ✅ Передаём id
         >
-          <span className='me-1'>#</span>{name}
+          <span className='me-1'>#</span>{displayName}
         </button>
         <button
           type='button'
@@ -63,14 +74,14 @@ const ChannelButton = ({ id, name, currentChannelId,  onClick, removable = false
             </button>
           </li>
           <li>
-            <button className='dropdown-item' type='button' onClick={() => onRename(id, name)}>
+            <button className='dropdown-item' type='button' onClick={() => onRename(id, displayName)}>
               Переименовать
             </button>
           </li>
         </ul>
       </div>
     </li>
-  )  
-}
+  );
+};
 
-export default ChannelButton
+export default ChannelButton;

@@ -1,120 +1,163 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-
-import ChatHeader from '../../components/MainComponents/ChatHeader'
-import Messages from '../../components/MainComponents/Messages'
-import MessageInput from '../../components/MainComponents/MessageInput'
-
-import { fetchChannels } from '../../api/channels'
-import { fetchMessages } from '../../api/messages'
-import { setChannels } from '../../store/entities/channelsSlice'
-import { setCurrentChannelId, addChannel, removeChannel } from '../../store/entities/channelsSlice'
-import { setMessages, addMessage } from '../../store/entities/messagesSlice'
-import useApi from '../../hooks/useApi'
+import React, { useEffect, useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import ChatHeader from '../../components/MainComponents/ChatHeader';
+import Messages from '../../components/MainComponents/Messages';
+import MessageInput from '../../components/MainComponents/MessageInput';
+import {
+  selectCurrentChannel,
+  selectCurrentChannelId,
+  setCurrentChannelId,
+} from '../../store/entities/channelsSlice';
+import { selectUsername } from '../../store/entities/userSlice';
+import { selectMessagesByChannelId } from '../../store/entities/messagesSlice';
+import useApi from '../../hooks/useApi';
+import useNetworkStatus from '../../hooks/useNetworkStatus';
+import { useChatApi } from '../../pages/Chat/ChatApi';
 
 const ChatWindowContainer = () => {
-  const dispatch = useDispatch()
-  const [message, setMessage] = useState('')
+  const dispatch = useDispatch();
+  const [message, setMessage] = useState('');
+  const [isSending, setIsSending] = useState(false);
+  const [offlineMessages, setOfflineMessages] = useState([]);
+  
+  const isOnline = useNetworkStatus();
+  const { socket } = useApi();
+  const { 
+    sendMessage,
+    setupMessagesHandlers,
+    getChannels,
+    getMessages
+  } = useChatApi(socket);
 
-  const { sendMessage, socket } = useApi()
+  // Селекторы
+  const currentChannelId = useSelector(selectCurrentChannelId);
+  const currentChannel = useSelector(selectCurrentChannel);
+  const username = useSelector(selectUsername);
+  const messages = useSelector((state) => selectMessagesByChannelId(state, currentChannelId));
 
-  // получаем currentChannelId для фильтрации сообщений
-  const currentChannelId = useSelector((state) => state.channels.currentChannelId)
-  const currentChannel = useSelector((state) =>
-    state.channels.list.find((c) => c.id === currentChannelId)
-  )
-  const username = useSelector((state) => state.user.username)
+  // Отправка оффлайн-сообщений при восстановлении соединения
+  const sendOfflineMessages = useCallback(async () => {
+    if (offlineMessages.length === 0) return;
 
-  // фильтруем сообщения только для текущего канала
-  const messages = useSelector((state) =>
-    state.messages.list.filter((m) => m.channelId === currentChannelId)
-  )
+    try {
+      setIsSending(true);
+      for (const msg of offlineMessages) {
+        await sendMessage(msg);
+      }
+      setOfflineMessages([]);
+      toast.success('Оффлайн-сообщения отправлены');
+    } catch (error) {
+      toast.error('Не удалось отправить некоторые сообщения');
+      console.error('Ошибка отправки оффлайн-сообщений:', error);
+    } finally {
+      setIsSending(false);
+    }
+  }, [offlineMessages, sendMessage]);
 
-  // Загрузка каналов и сообщений при монтировании
+  // Инициализация чата
   useEffect(() => {
-    const fetchData = async () => {
+    const initializeChat = async () => {
       try {
-        const channelsData = await fetchChannels()
-        dispatch(setChannels(channelsData))
-        // Если currentChannelId ещё не установлен, выбираем general
-        const generalChannel = channelsData.find((channel) => channel.name === 'general')
-        if (generalChannel) {
-          dispatch(setCurrentChannelId(generalChannel.id))
+        const channelsAction = await getChannels();
+        if (!channelsAction || !channelsAction.payload) {
+          throw new Error('Не удалось загрузить каналы: пустой ответ');
         }
 
-        const messagesData = await fetchMessages()
-        dispatch(setMessages(messagesData))
+        const channels = channelsAction.payload;
+
+        if (!currentChannelId) {
+          const generalChannel = channels.find(channel => channel.name === 'general');
+          if (generalChannel) {
+            dispatch(setCurrentChannelId(generalChannel.id));
+          }
+        }
+        
+        await getMessages();
       } catch (err) {
-        console.error('Ошибка загрузки данных:', err)
+        console.error('Ошибка инициализации чата:', err);
+        toast.error('Ошибка при загрузке чата');
       }
-    }
+    };
 
-    fetchData()
-  }, [dispatch])
+    initializeChat();
+    
+    // При подключении сокета перезагружаем данные
+    const handleConnect = () => {
+      getMessages();
+      getChannels();
+    };
 
-  // Слушаем входящие сообщения через socket
-  useEffect(() => {
-    if (!socket) return
-
-    const handleNewMessage = (payload) => {
-      dispatch(addMessage(payload))
-    }
-
-    // Слушаем добавление новых каналов через socket
-    const handleNewChannel = (payload) => {
-      dispatch(addChannel(payload))
-    }
-
-    // Слушаем удаление каналов
-    const handleRemoveChannel = (payload) => {
-      dispatch(removeChannel(payload.id))
-    }
-
-    socket.on('newMessage', handleNewMessage)
-    socket.on('newChannel', handleNewChannel)
-    socket.on('removeChannel', handleRemoveChannel)
-
-    // Очистка слушателя при размонтировании
+    socket?.on('connect', handleConnect);
+    window.addEventListener('online', sendOfflineMessages);
+    
     return () => {
-      socket.off('newMessage', handleNewMessage)
-      socket.off('newChannel', handleNewChannel)
-      socket.off('removeChannel', handleRemoveChannel)
-    }
-  }, [socket, dispatch])
-  
-  // логика отправки сообщения
+      socket?.off('connect', handleConnect);
+      window.removeEventListener('online', sendOfflineMessages);
+    };
+  }, [dispatch, sendOfflineMessages, currentChannelId, getChannels, getMessages, socket]);
+
+  // Настройка обработчиков сообщений
+  useEffect(() => {
+    if (!socket) return;
+    
+    const cleanupMessages = setupMessagesHandlers();
+    return cleanupMessages;
+  }, [socket, setupMessagesHandlers]);
+
+  // Отправка сообщения (без изменений)
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!message.trim()) return
+    e.preventDefault();
+    if (!message.trim()) return;
 
     const messageData = {
       body: message,
       channelId: currentChannel.id,
       username,
-    }
+    };
 
     try {
-      await sendMessage(messageData)
-      setMessage('')
+      setIsSending(true);
+      
+      if (!isOnline) {
+        setOfflineMessages((prev) => [...prev, messageData]);
+        toast.warn('Сообщение сохранено локально');
+        setMessage('');
+        return;
+      }
+      
+      await sendMessage(messageData);
+      setMessage('');
     } catch (error) {
-      console.error('Ошибка при отправке сообщения:', error)
-      // Здесь можно добавить уведомление пользователю, что отправка не удалась
+      toast.error('Ошибка отправки сообщения');
+      console.error('Ошибка отправки сообщения:', error);
+    } finally {
+      setIsSending(false);
     }
-  }
+  };
 
   return (
     <div className='col p-0 h-100'>
       <div className='d-flex flex-column h-100'>
-        <ChatHeader channelName={currentChannel?.name || 'general'} messageCount={messages.length} />
+        <ChatHeader 
+          channelName={currentChannel?.name || 'general'} 
+          messageCount={messages.length}
+        />
+        
         <Messages messages={messages} />
+        
         <MessageInput
           message={message}
           onChange={(e) => setMessage(e.target.value)}
           onSubmit={handleSubmit}
+          disabled={isSending || !currentChannelId}
         />
+        
+        <ToastContainer position="bottom-right" autoClose={5000} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ChatWindowContainer
+export default ChatWindowContainer;

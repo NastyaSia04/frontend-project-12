@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { FormGroup } from 'react-bootstrap'
 import classNames from 'classnames'
 
-const AddChannelModal = ({
+const RenameChannelModal = ({
   values,
   errors,
   touched,
@@ -16,6 +16,7 @@ const AddChannelModal = ({
   
   useEffect(() => {
     inputRef.current?.focus()
+    inputRef.current?.select()
   }, [])
 
   return (
@@ -32,10 +33,9 @@ const AddChannelModal = ({
           value={values.name}
           onChange={handleChange}
           onBlur={handleBlur}
-          placeholder="Введите имя канала"
         />
         <label htmlFor="name" className="visually-hidden">
-          Имя канала
+          Новое имя канала
         </label>
         {touched.name && errors.name && (
           <div className="invalid-feedback">{errors.name}</div>
@@ -62,4 +62,4 @@ const AddChannelModal = ({
   )
 }
 
-export default AddChannelModal
+export default RenameChannelModal

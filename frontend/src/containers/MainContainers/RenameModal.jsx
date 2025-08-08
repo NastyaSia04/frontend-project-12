@@ -3,31 +3,33 @@ import { createPortal } from 'react-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Formik } from 'formik'
 import channelSchema from '../../utils/validation/channelSchema'
-import AddChannelModal from '../../components/MainComponents/AddChannelModal'
+import RenameChannelModal from '../../components/MainComponents/RenameChannelModal'
 import Modal from '../../components/MainComponents/Modal'
 import { closeModal } from '../../store/entities/uiSlice'
-import { addChannelAsync } from '../../store/entities/channelsSlice'
+import { renameChannelAsync } from '../../store/entities/channelsSlice'
 
-const AddModal = () => {
+const RenameModal = ({ channelId, currentName }) => {
   const dispatch = useDispatch()
-  const existingChannelNames = useSelector(
-    state => state.channels.list.map(channel => channel.name)
+  const existingChannelNames = useSelector(state => 
+    state.channels.list
+      .filter(channel => channel.id !== channelId)
+      .map(channel => channel.name)
   )
 
   const handleClose = useCallback(() => {
     dispatch(closeModal())
   }, [dispatch])
 
-  const handleSubmit = useCallback(async ({ name }, { setSubmitting }) => {
+  const handleSubmit = useCallback(async (newName, { setSubmitting }) => {
     try {
-      await dispatch(addChannelAsync(name)).unwrap()
+      await dispatch(renameChannelAsync({ id: channelId, name: newName })).unwrap()
       handleClose()
     } catch (err) {
-      console.error('Ошибка при добавлении канала:', err)
+      console.error('Ошибка при переименовании канала:', err)
     } finally {
       setSubmitting(false)
     }
-  }, [dispatch, handleClose])
+  }, [dispatch, channelId, handleClose])
 
   useEffect(() => {
     const handleKey = (e) => e.key === 'Escape' && handleClose()
@@ -36,16 +38,16 @@ const AddModal = () => {
   }, [handleClose])
 
   return createPortal(
-    <Modal title="Добавить канал" onClose={handleClose}>
+    <Modal title="Переименовать канал" onClose={handleClose}>
       <Formik
-        initialValues={{ name: '' }}
+        initialValues={{ name: currentName }}
         validationSchema={channelSchema(existingChannelNames)}
         validateOnBlur={false}
         validateOnChange={false}
-        onSubmit={handleSubmit}
+        onSubmit={(values, actions) => handleSubmit(values.name, actions)}
       >
         {(formikProps) => (
-          <AddChannelModal 
+          <RenameChannelModal 
             {...formikProps}
             onHide={handleClose}
           />
@@ -56,4 +58,4 @@ const AddModal = () => {
   )
 }
 
-export default AddModal
+export default RenameModal

@@ -4,6 +4,8 @@ const initialState = {
   username: null
 }
 
+export const selectUsername = (state) => state.user.username
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
