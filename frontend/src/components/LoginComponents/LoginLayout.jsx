@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from '../SharedComponents/Navbar'
 import LoginForm from './LoginForm'
+import { Link } from 'react-router-dom'
 
 const LoginLayout = ({ onSubmit }) => (
   <div className='h-100 bg-light'>
@@ -34,7 +35,7 @@ const LoginLayout = ({ onSubmit }) => (
               <div className='card-footer p-4'>
                 <div className='text-center'>
                   <span>Нет аккаунта? </span>
-                  <a href='/signup'>Регистрация</a>
+                  <Link to='/signup'>Регистрация</Link>
                 </div>
               </div>
             </div>
