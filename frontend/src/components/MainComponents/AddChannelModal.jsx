@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { FormGroup } from 'react-bootstrap'
 import classNames from 'classnames'
+import { useTranslation } from 'react-i18next'
 
 const AddChannelModal = ({
   values,
@@ -12,6 +13,8 @@ const AddChannelModal = ({
   isSubmitting,
   onHide
 }) => {
+  const { t } = useTranslation()
+
   const inputRef = useRef(null)
   
   useEffect(() => {
@@ -32,10 +35,10 @@ const AddChannelModal = ({
           value={values.name}
           onChange={handleChange}
           onBlur={handleBlur}
-          placeholder="Введите имя канала"
+          placeholder={t('channels.modal.placeholder')}
         />
         <label htmlFor="name" className="visually-hidden">
-          Имя канала
+          {t('channels.modal.label')}
         </label>
         {touched.name && errors.name && (
           <div className="invalid-feedback">{errors.name}</div>
@@ -48,14 +51,14 @@ const AddChannelModal = ({
           onClick={onHide}
           disabled={isSubmitting}
         >
-          Отменить
+          {t('channels.modal.cancel')}
         </button>
         <button
           type="submit"
           className="btn btn-primary"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Отправка...' : 'Отправить'}
+          {isSubmitting ? t('channels.modal.submitting') : t('channels.modal.submit')}
         </button>
       </div>
     </form>

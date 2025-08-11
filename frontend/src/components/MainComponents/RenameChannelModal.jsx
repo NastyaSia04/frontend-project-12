@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { FormGroup } from 'react-bootstrap'
 import classNames from 'classnames'
+import { useTranslation } from 'react-i18next'
 
 const RenameChannelModal = ({
   values,
@@ -12,6 +13,8 @@ const RenameChannelModal = ({
   isSubmitting,
   onHide
 }) => {
+  const { t } = useTranslation()
+
   const inputRef = useRef(null)
   
   useEffect(() => {
@@ -35,7 +38,7 @@ const RenameChannelModal = ({
           onBlur={handleBlur}
         />
         <label htmlFor="name" className="visually-hidden">
-          Новое имя канала
+          {t('channels.modal.newNameLabel')}
         </label>
         {touched.name && errors.name && (
           <div className="invalid-feedback">{errors.name}</div>
@@ -48,14 +51,14 @@ const RenameChannelModal = ({
           onClick={onHide}
           disabled={isSubmitting}
         >
-          Отменить
+          {t('channels.modal.cancel')}
         </button>
         <button
           type="submit"
           className="btn btn-primary"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Отправка...' : 'Отправить'}
+          {isSubmitting ? t('channels.modal.submitting') : t('channels.modal.submit')}
         </button>
       </div>
     </form>

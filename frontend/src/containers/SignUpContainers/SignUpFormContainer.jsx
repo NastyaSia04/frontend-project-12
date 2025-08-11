@@ -4,10 +4,12 @@ import { signup } from '../../api/auth'
 import SignUpLayout from '../../components/SignUpComponents/SignUpLayout'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../../store/entities/userSlice'
+import { useTranslation } from 'react-i18next'
 
 const SignUpFormContainer = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { t } = useTranslation()
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
@@ -22,10 +24,10 @@ const SignUpFormContainer = () => {
         setErrors({
           username: ' ',
           password: ' ',
-          confirmPassword: 'Такой пользователь уже существует'
+          confirmPassword: t('signUp.errors.userExists'),
         })
       } else {
-        setErrors('Ошибка регистрации') 
+        setErrors(t('signUp.errors.generic')) 
       }   
     } finally {
       setSubmitting(false)

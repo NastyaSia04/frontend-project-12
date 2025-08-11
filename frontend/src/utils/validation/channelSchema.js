@@ -1,14 +1,11 @@
 import * as Yup from 'yup'
 
-const channelSchema = (existingChannelName) => Yup.object({
+const channelSchema = (t, existingChannelName) => Yup.object({
   name: Yup.string()
-    .test(
-      'length',
-      'От 3 до 30 символов',
-      (value) => value && value.length >= 3 && value.length <= 20
-    )
-    .notOneOf(existingChannelName, 'Имя канала уже существует')
-    .required('Обязательное поле'),
+    .min(3, t('validation.minThree'))
+    .max(20, t('validation.maxTwenty'))
+    .notOneOf(existingChannelName, t('validation.channelExists'))
+    .required(t('validation.required')),
 })
 
 export default channelSchema

@@ -1,5 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
+import { useTranslation } from 'react-i18next'
 
 const ChannelButton = ({
   channel,                // ✅ Изменено: теперь получаем весь объект канала
@@ -8,12 +9,13 @@ const ChannelButton = ({
   onRemove,
   onRename,
 }) => {
+  const { t } = useTranslation()
   
   console.log('ChannelButton props.channel:', channel);
   const { id, name, removable } = channel; // ✅ Извлекаем нужные поля из объекта
   const displayName = typeof name === 'object' && name !== null ? name.name : name; // 🔧 Унификация
 
-  const isActive = id === currentChannelId;
+  const isActive = id === currentChannelId
 
   const buttonClass = classNames(
     'w-100',
@@ -23,7 +25,7 @@ const ChannelButton = ({
     {
       'btn-secondary': isActive,
     }
-  );
+  )
 
   const toggleClass = classNames(
     'flex-grow-0',
@@ -33,7 +35,7 @@ const ChannelButton = ({
     {
       'btn-secondary': isActive,
     }
-  );
+  )
 
   if (!removable) {
     return (
@@ -46,7 +48,7 @@ const ChannelButton = ({
           <span className='me-1'>#</span>{displayName}
         </button>
       </li>
-    );
+    )
   }
 
   return (
@@ -65,23 +67,23 @@ const ChannelButton = ({
           data-bs-toggle='dropdown'
           aria-expanded='false'
         >
-          <span className='visually-hidden'>Управление каналом</span>
+          <span className='visually-hidden'>{t('channels.manageChannel')}</span>
         </button>
         <ul className='dropdown-menu'>
           <li>
             <button className='dropdown-item' type='button' onClick={() => onRemove(id)}>
-              Удалить
+              {t('channels.remove')}
             </button>
           </li>
           <li>
             <button className='dropdown-item' type='button' onClick={() => onRename(id, displayName)}>
-              Переименовать
+              {t('channels.rename')}
             </button>
           </li>
         </ul>
       </div>
     </li>
-  );
-};
+  )
+}
 
-export default ChannelButton;
+export default ChannelButton

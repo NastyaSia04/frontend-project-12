@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import Navbar from '../../components/SharedComponents/Navbar'
 import ChannelsPanelContainer from '../../containers/MainContainers/ChannelsPanelContainer'
 import ChatWindowContainer from '../../containers/MainContainers/ChatWindowContainer'
@@ -6,6 +7,7 @@ import { ApiProvider } from '../../context/ApiContext'
 import ModalRoot from '../../containers/MainContainers/ModalRoot'
 
 const ChatPage = () => {
+  const { t } = useTranslation()
   const handleLogout = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('username')
@@ -19,7 +21,7 @@ const ChatPage = () => {
           {/* Навигационная панель */}
           <Navbar>
             <button type='button' className='btn btn-primary' onClick={handleLogout}>
-              Выйти
+              {t('navbar.exit')}
             </button>
           </Navbar>
 

@@ -1,14 +1,14 @@
 import * as Yup from 'yup';
 
-const loginSchema = Yup.object().shape({
+const loginSchema = (t) => Yup.object().shape({
   username: Yup.string()
-    .min(2, 'Минимум 2 буквы')
-    .max(20, 'Максимум 20 букв')
-    .required('Обязательное поле'),
+    .min(2, t('validation.minPasw'))
+    .max(20, t('validation.maxPasw'))
+    .required(t('validation.required')),
   password: Yup.string()
-    .min(2, 'Минимум 2 буквы')
-    .max(20, 'Максимум 20 букв')
-    .required('Обязательное поле'),
+    .min(2, t('validation.minPasw'))
+    .max(20, t('validation.maxPasw'))
+    .required(t('validation.required')),
 })
 
 export default loginSchema

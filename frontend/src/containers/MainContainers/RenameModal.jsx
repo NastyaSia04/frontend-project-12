@@ -2,6 +2,7 @@ import React, { useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Formik } from 'formik'
+import { useTranslation } from 'react-i18next'
 import channelSchema from '../../utils/validation/channelSchema'
 import RenameChannelModal from '../../components/MainComponents/RenameChannelModal'
 import Modal from '../../components/MainComponents/Modal'
@@ -9,6 +10,7 @@ import { closeModal } from '../../store/entities/uiSlice'
 import { renameChannelAsync } from '../../store/entities/channelsSlice'
 
 const RenameModal = ({ channelId, currentName }) => {
+  const { t } = useTranslation()
   const dispatch = useDispatch()
   const existingChannelNames = useSelector(state => 
     state.channels.list
@@ -38,10 +40,10 @@ const RenameModal = ({ channelId, currentName }) => {
   }, [handleClose])
 
   return createPortal(
-    <Modal title="Переименовать канал" onClose={handleClose}>
+    <Modal title={t('channels.modal.renameTitle')} onClose={handleClose}>
       <Formik
         initialValues={{ name: currentName }}
-        validationSchema={channelSchema(existingChannelNames)}
+        validationSchema={channelSchema(t, existingChannelNames)}
         validateOnBlur={false}
         validateOnChange={false}
         onSubmit={(values, actions) => handleSubmit(values.name, actions)}

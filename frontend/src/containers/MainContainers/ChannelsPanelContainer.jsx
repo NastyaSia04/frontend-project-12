@@ -1,17 +1,19 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import AddChannelButton from '../../components/MainComponents/AddChannelButton';
-import ChannelButton from '../../components/MainComponents/ChannelButton';
-import { openModal } from '../../store/entities/uiSlice';
+import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector, useDispatch } from 'react-redux'
+import AddChannelButton from '../../components/MainComponents/AddChannelButton'
+import ChannelButton from '../../components/MainComponents/ChannelButton'
+import { openModal } from '../../store/entities/uiSlice'
 import { 
   setCurrentChannelId,
   selectChannels,
   selectCurrentChannelId,
-} from '../../store/entities/channelsSlice';
-import { useChatApi } from '../../pages/Chat/ChatApi';
-import useApi from '../../hooks/useApi';
+} from '../../store/entities/channelsSlice'
+import { useChatApi } from '../../pages/Chat/ChatApi'
+import useApi from '../../hooks/useApi'
 
 const ChannelsPanelContainer = () => {
+  const { t } = useTranslation()
   const dispatch = useDispatch();
   const channels = useSelector(selectChannels);
   const currentChannelId = useSelector(selectCurrentChannelId);
@@ -69,7 +71,7 @@ const ChannelsPanelContainer = () => {
   return (
     <div className='col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex'>
       <div className='d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4'>
-        <b>Каналы</b>
+        <b>{t('channels.title')}</b>
         <AddChannelButton onClick={handleAddChannel} />
       </div>
 

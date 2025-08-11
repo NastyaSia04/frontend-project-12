@@ -1,16 +1,16 @@
 import * as Yup from 'yup';
 
-const signUpSchema = Yup.object().shape({
+const signUpSchema = (t) => Yup.object().shape({
   username: Yup.string()
-    .min(3, 'От 3 до 20 символов')
-    .max(20, 'От 3 до 20 символов')
-    .required('Обязательное поле'),
+    .min(3, t('validation.minThree'))
+    .max(20, t('validation.maxTwenty'))
+    .required(t('validation.required')),
   password: Yup.string()
-    .min(6, 'Не менее 6 символов')
-    .required('Обязательное поле'),
+    .min(6, t('validation.minSix'))
+    .required(t('validation.required')),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
-    .required('Обязательное поле'),
+    .oneOf([Yup.ref('password'), null], t('validation.passwordsMustMatch'))
+    .required(t('validation.required')),
 })
 
 export default signUpSchema

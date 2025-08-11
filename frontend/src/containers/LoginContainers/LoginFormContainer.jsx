@@ -4,10 +4,12 @@ import { login } from '../../api/auth'
 import LoginLayout from '../../components/LoginComponents/LoginLayout'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../../store/entities/userSlice'
+import { useTranslation } from 'react-i18next'
 
 const LoginFormContainer = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   
   const handleSubmit = async (values, { setSubmitting, setStatus }) => {
     try {
@@ -17,7 +19,7 @@ const LoginFormContainer = () => {
       dispatch(setUser(username)) // Устанавливаем пользователя в Redux
       navigate('/') // переход на главную страницу (чат)
     } catch {
-      setStatus('Неверные имя пользователя или пароль') // Показываем сообщение об ошибке авторизации
+      setStatus(t('login.errors.invalidCredentials')) // Показываем сообщение об ошибке авторизации
     } finally {
       setSubmitting(false) //Убираем состояние "загрузки" (например, чтобы снова показать кнопку "Войти").
     }
