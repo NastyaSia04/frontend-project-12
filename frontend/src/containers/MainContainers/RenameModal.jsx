@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
 import channelSchema from '../../utils/validation/channelSchema'
 import RenameChannelModal from '../../components/MainComponents/RenameChannelModal'
 import Modal from '../../components/MainComponents/Modal'
@@ -25,13 +26,15 @@ const RenameModal = ({ channelId, currentName }) => {
   const handleSubmit = useCallback(async (newName, { setSubmitting }) => {
     try {
       await dispatch(renameChannelAsync({ id: channelId, name: newName })).unwrap()
+      toast.success(t('notifications.channelRenamed'))
       handleClose()
     } catch (err) {
       console.error('Ошибка при переименовании канала:', err)
+      toast.error(t('notifications.networkError'))
     } finally {
       setSubmitting(false)
     }
-  }, [dispatch, channelId, handleClose])
+  }, [dispatch, channelId, handleClose, t])
 
   useEffect(() => {
     const handleKey = (e) => e.key === 'Escape' && handleClose()

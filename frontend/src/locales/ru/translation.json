@@ -51,8 +51,7 @@
     "confirmPassword": "Подтвердите пароль",
     "submit": "Зарегистрироваться",
     "errors": {
-    "userExists": "Такой пользователь уже существует",
-    "generic": "Ошибка регистрации"
+    "userExists": "Такой пользователь уже существует"
   }
   },
   "notFound": {
@@ -69,5 +68,17 @@
     "maxPasw": "Максимум 20 букв",
     "channelExists": "Имя канала уже существует",
     "passwordsMustMatch": "Пароли должны совпадать"
+  },
+  "notifications": {
+    "channelCreated": "Канал создан",
+    "channelRemoved": "Канал удалён",
+    "channelRenamed": "Канал переименован",
+    "networkError": "Ошибка соединения",
+    "dataLoadError": "Ошибка загрузки данных",
+    "offlineMessagesSent": "Оффлайн-сообщения отправлены",
+    "offlineMessagesSendError": "Не удалось отправить некоторые сообщения",
+    "messageSavedOffline": "Сообщение сохранено локально",
+    "messageSendError": "Ошибка отправки сообщения",
+    "chatLoadError": "Ошибка при загрузке чата"
   }
 }

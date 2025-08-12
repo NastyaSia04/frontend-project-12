@@ -5,11 +5,13 @@ import SignUpLayout from '../../components/SignUpComponents/SignUpLayout'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../../store/entities/userSlice'
 import { useTranslation } from 'react-i18next'
+import { useApiError } from '../../hooks/useApiError'
 
 const SignUpFormContainer = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { t } = useTranslation()
+  const handleApiError = useApiError()
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     try {
@@ -19,16 +21,17 @@ const SignUpFormContainer = () => {
       localStorage.setItem('username', username)
       dispatch(setUser(username))
       navigate('/')
-    } catch (err) {
-      if (err.response?.status === 409) {
-        setErrors({
+    } catch (error) {
+      console.error('Ошибка регистрации:', error)
+
+      handleApiError(error, {
+        setErrors,
+        fieldErrors: {
           username: ' ',
           password: ' ',
           confirmPassword: t('signUp.errors.userExists'),
-        })
-      } else {
-        setErrors(t('signUp.errors.generic')) 
-      }   
+        },
+      })  
     } finally {
       setSubmitting(false)
     }

@@ -3,6 +3,8 @@ import { createPortal } from 'react-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
+
 import channelSchema from '../../utils/validation/channelSchema'
 import AddChannelModal from '../../components/MainComponents/AddChannelModal'
 import Modal from '../../components/MainComponents/Modal'
@@ -23,13 +25,15 @@ const AddModal = () => {
   const handleSubmit = useCallback(async ({ name }, { setSubmitting }) => {
     try {
       await dispatch(addChannelAsync(name)).unwrap()
+      toast.success(t('notifications.channelCreated'))
       handleClose()
     } catch (err) {
-      console.error('Ошибка при добавлении канала:', err)
+      console.error('Ошибка добавления канала:',err)
+      toast.error(t('notifications.networkError'))
     } finally {
       setSubmitting(false)
     }
-  }, [dispatch, handleClose])
+  }, [dispatch, handleClose, t])
 
   useEffect(() => {
     const handleKey = (e) => e.key === 'Escape' && handleClose()

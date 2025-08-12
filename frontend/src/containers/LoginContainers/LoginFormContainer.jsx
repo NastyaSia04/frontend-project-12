@@ -4,24 +4,29 @@ import { login } from '../../api/auth'
 import LoginLayout from '../../components/LoginComponents/LoginLayout'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../../store/entities/userSlice'
-import { useTranslation } from 'react-i18next'
+import { useApiError } from '../../hooks/useApiError'
 
 const LoginFormContainer = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { t } = useTranslation()
+  const handleApiError = useApiError()
   
   const handleSubmit = async (values, { setSubmitting, setStatus }) => {
     try {
-      const { token, username } = await login(values.username, values.password) // Попытка входа на сервер, Если всё хорошо, сервер отвечает: { token: '...', username: '...' }
-      localStorage.setItem('token', token) //сохраняем токен и имя пользователя в localStorage, чтобы потом использовать (для запроса к серверу и доступа к чату). один раз после входа.
+      const { token, username } = await login(values.username, values.password)
+      localStorage.setItem('token', token)
       localStorage.setItem('username', username)
-      dispatch(setUser(username)) // Устанавливаем пользователя в Redux
-      navigate('/') // переход на главную страницу (чат)
-    } catch {
-      setStatus(t('login.errors.invalidCredentials')) // Показываем сообщение об ошибке авторизации
+      dispatch(setUser(username))
+      navigate('/')
+    } catch (error) {
+      console.error('Ошибка авторизации:', error)
+
+      handleApiError(error, {
+        setStatus,
+        defaultMessageKey: 'login.errors.invalidCredentials',
+      })
     } finally {
-      setSubmitting(false) //Убираем состояние "загрузки" (например, чтобы снова показать кнопку "Войти").
+      setSubmitting(false)
     }
   }
 

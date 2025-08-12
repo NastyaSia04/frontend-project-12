@@ -21,7 +21,6 @@
     "postinstall": "cd frontend && npm ci"
   },
   "dependencies": {
-    "@hexlet/chat-server": "^2.0.4",
-    "react-toastify": "^11.0.5"
+    "@hexlet/chat-server": "^2.0.4"
   }
 }
