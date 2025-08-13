@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 
 const ChannelButton = ({
-  channel,                // ✅ Изменено: теперь получаем весь объект канала
+  channel,                
   currentChannelId,
   onClick,
   onRemove,
@@ -12,8 +12,8 @@ const ChannelButton = ({
   const { t } = useTranslation()
   
   console.log('ChannelButton props.channel:', channel);
-  const { id, name, removable } = channel; // ✅ Извлекаем нужные поля из объекта
-  const displayName = typeof name === 'object' && name !== null ? name.name : name; // 🔧 Унификация
+  const { id, name, removable } = channel;
+  const displayName = typeof name === 'object' && name !== null ? name.name : name;
 
   const isActive = id === currentChannelId
 
@@ -43,7 +43,7 @@ const ChannelButton = ({
         <button
           type='button'
           className={buttonClass}
-          onClick={() => onClick(id)} // ✅ Передаём id
+          onClick={() => onClick(id)}
         >
           <span className='me-1'>#</span>{displayName}
         </button>
@@ -57,7 +57,7 @@ const ChannelButton = ({
         <button
           type='button'
           className={buttonClass}
-          onClick={() => onClick(id)} // ✅ Передаём id
+          onClick={() => onClick(id)}
         >
           <span className='me-1'>#</span>{displayName}
         </button>
