@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import { BASE_URL } from '../../config'
+import filter from 'leo-profanity'
 import { getAuthHeaders } from '../../api/headers'
 import { 
   addChannel as addChannelAction,
@@ -69,7 +70,11 @@ export const useChatApi = (socket) => {
   // === API методы ===
   const sendMessage = useCallback(async (messageData) => {
     try {
-      await axios.post(`${BASE_URL}/messages`, messageData, getAuthHeaders())
+      const cleanedMessageData = {
+        ...messageData,
+        body: filter.clean(messageData.body.trim())
+      }
+      await axios.post(`${BASE_URL}/messages`, cleanedMessageData, getAuthHeaders())
       
       // Не вызываем dispatch здесь - сервер пришлет сообщение через сокет
     } catch (error) {

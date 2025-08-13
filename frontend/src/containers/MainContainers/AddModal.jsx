@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
+import filter from 'leo-profanity'
 
 import channelSchema from '../../utils/validation/channelSchema'
 import AddChannelModal from '../../components/MainComponents/AddChannelModal'
@@ -24,7 +25,8 @@ const AddModal = () => {
 
   const handleSubmit = useCallback(async ({ name }, { setSubmitting }) => {
     try {
-      await dispatch(addChannelAsync(name)).unwrap()
+      const cleanedName = filter.clean(name.trim())
+      await dispatch(addChannelAsync(cleanedName)).unwrap()
       toast.success(t('notifications.channelCreated'))
       handleClose()
     } catch (err) {

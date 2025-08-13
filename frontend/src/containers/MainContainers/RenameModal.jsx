@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
+import filter from 'leo-profanity'
+
 import channelSchema from '../../utils/validation/channelSchema'
 import RenameChannelModal from '../../components/MainComponents/RenameChannelModal'
 import Modal from '../../components/MainComponents/Modal'
@@ -25,7 +27,8 @@ const RenameModal = ({ channelId, currentName }) => {
 
   const handleSubmit = useCallback(async (newName, { setSubmitting }) => {
     try {
-      await dispatch(renameChannelAsync({ id: channelId, name: newName })).unwrap()
+      const cleanedName = filter.clean(newName.trim())
+      await dispatch(renameChannelAsync({ id: channelId, name: cleanedName })).unwrap()
       toast.success(t('notifications.channelRenamed'))
       handleClose()
     } catch (err) {
