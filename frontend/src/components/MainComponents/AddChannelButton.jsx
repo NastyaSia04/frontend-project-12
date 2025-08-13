@@ -13,7 +13,7 @@ const AddChannelButton = ({ onClick }) => {
       onClick={onClick}
     >
       <PlusSquare size={20} />
-      <span className='visually-hidden'>+</span>
+      <span className='visually-hidden'>{t('channels.addButtonPlus')}</span>
     </button>
   )
 }

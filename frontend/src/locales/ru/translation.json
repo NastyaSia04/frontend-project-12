@@ -17,6 +17,7 @@
   "channels": {
     "title": "Каналы",
     "addButtonAria": "Добавить канал",
+    "addButtonPlus": "+",
     "manageChannel": "Управление каналом",
     "remove": "Удалить",
     "rename": "Переименовать",
