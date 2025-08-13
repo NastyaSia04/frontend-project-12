@@ -15,10 +15,6 @@ const rollbarConfig = {
   environment: import.meta.env.MODE || 'development',
 }
 
-setTimeout(() => {
-  throw new Error('Тестовая ошибка Rollbar из Vite+React');
-}, 2000)
-
 filter.loadDictionary('ru')
 filter.loadDictionary('en')
 
