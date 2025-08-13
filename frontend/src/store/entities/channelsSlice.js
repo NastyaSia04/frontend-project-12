@@ -1,25 +1,25 @@
-import { createSelector, createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { getAuthHeaders } from '../../api/headers';
-import { BASE_URL } from '../../config'; 
-import { deleteChannelMessages } from '../../api/messages';
+import { createSelector, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import axios from 'axios'
+import { getAuthHeaders } from '../../api/headers'
+import { BASE_URL } from '../../config'
+import { deleteChannelMessages } from '../../api/messages'
 
 const initialState = {
   list: [],
   currentChannelId: null,
   loading: false,
   error: null,
-};
+}
 
 // Селекторы
-export const selectChannels = (state) => state.channels.list;
-export const selectCurrentChannelId = (state) => state.channels.currentChannelId;
+export const selectChannels = (state) => state.channels.list
+export const selectCurrentChannelId = (state) => state.channels.currentChannelId
 export const selectCurrentChannel = createSelector(
   [selectChannels, (state) => state.channels.currentChannelId],
   (channels, currentId) => channels.find(c => c.id === currentId)
-);
-export const selectChannelsLoading = (state) => state.channels.loading;
-export const selectChannelsError = (state) => state.channels.error;
+)
+export const selectChannelsLoading = (state) => state.channels.loading
+export const selectChannelsError = (state) => state.channels.error
 
 // THUNK: получение каналов
 export const fetchChannelsAsync = createAsyncThunk(
@@ -29,33 +29,33 @@ export const fetchChannelsAsync = createAsyncThunk(
       const response = await axios.get(
         `${BASE_URL}/channels`,
         getAuthHeaders()
-      );
+      )
       return response.data;
     } catch (error) {
-      console.error('Error fetching channels:', error);
-      return rejectWithValue(error.message);
+      console.error('Error fetching channels:', error)
+      return rejectWithValue(error.message)
     }
   }
-);
+)
 
 // THUNK: добавление канала
 export const addChannelAsync = createAsyncThunk(
   'channels/addChannelAsync',
-  async (name, { rejectWithValue }) => { // ✅ Меняем аргумент на name
+  async (name, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         `${BASE_URL}/channels`,
-        { name }, // ✅ передаём прямо name
+        { name },
         getAuthHeaders()
-      );
-      console.log('Добавленный канал из API:', response.data);
-      return response.data;
+      )
+      console.log('Добавленный канал из API:', response.data)
+      return response.data
     } catch (error) {
-      console.error('Error adding channel:', error);
-      return rejectWithValue(error.message);
+      console.error('Error adding channel:', error)
+      return rejectWithValue(error.message)
     }
   }
-);
+)
 
 // THUNK: переименование канала
 export const renameChannelAsync = createAsyncThunk(
@@ -66,159 +66,159 @@ export const renameChannelAsync = createAsyncThunk(
         `${BASE_URL}/channels/${id}`,
         { name },
         getAuthHeaders()
-      );
-      return response.data;
+      )
+      return response.data
     } catch (error) {
-      console.error('Error renaming channel:', error);
-      return rejectWithValue(error.message);
+      console.error('Error renaming channel:', error)
+      return rejectWithValue(error.message)
     }
   }
-);
+)
 
 // THUNK: удаление канала
 export const removeChannelAsync = createAsyncThunk(
   'channels/removeChannelAsync',
   async (channelId, { rejectWithValue }) => {
     try {
-      await deleteChannelMessages(channelId);
+      await deleteChannelMessages(channelId)
       await axios.delete(
         `${BASE_URL}/channels/${channelId}`,
         getAuthHeaders()
-      );
-      return channelId;
+      )
+      return channelId
     } catch (error) {
-      console.error('Error removing channel:', error);
-      return rejectWithValue(error.message);
+      console.error('Error removing channel:', error)
+      return rejectWithValue(error.message)
     }
   }
-);
+)
 
 const normalizeName = (name) =>
-  typeof name === 'object' && name !== null ? name.name : name;
+  typeof name === 'object' && name !== null ? name.name : name
 
 const channelsSlice = createSlice({
   name: 'channels',
   initialState,
   reducers: {
     addChannel: (state, action) => {
-      const { id, name, removable } = action.payload;
-      const channelName = normalizeName(name);
+      const { id, name, removable } = action.payload
+      const channelName = normalizeName(name)
 
       // ✅ Удаляем старый канал с таким же id перед добавлением
-      state.list = state.list.filter(c => c.id !== id);
-      state.list.push({ id, name: channelName, removable });
+      state.list = state.list.filter(c => c.id !== id)
+      state.list.push({ id, name: channelName, removable })
     },
     removeChannel: (state, action) => {
-      state.list = state.list.filter(c => c.id !== action.payload);
+      state.list = state.list.filter(c => c.id !== action.payload)
       if (state.currentChannelId === action.payload) {
-        const general = state.list.find(c => c.name === 'general');
-        state.currentChannelId = general ? general.id : (state.list[0]?.id || null);
+        const general = state.list.find(c => c.name === 'general')
+        state.currentChannelId = general ? general.id : (state.list[0]?.id || null)
       }
     },
     renameChannel: (state, action) => {
-      const { id, name } = action.payload;
-      const channel = state.list.find(c => c.id === id);
+      const { id, name } = action.payload
+      const channel = state.list.find(c => c.id === id)
       if (channel) {
-        channel.name = normalizeName(name);
+        channel.name = normalizeName(name)
       }
     },
     setCurrentChannelId: (state, action) => {
-      state.currentChannelId = action.payload;
+      state.currentChannelId = action.payload
     },
   },
   extraReducers: (builder) => {
     builder
       // === FETCH CHANNELS ===
       .addCase(fetchChannelsAsync.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loading = true
+        state.error = null
       })
       .addCase(fetchChannelsAsync.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading = false
         // ✅ Убираем дубликаты по id
-        const uniqueChannels = [];
-        const seenIds = new Set();
+        const uniqueChannels = []
+        const seenIds = new Set()
         action.payload.forEach((c) => {
           if (!seenIds.has(c.id)) {
-            uniqueChannels.push({ ...c, name: normalizeName(c.name) });
-            seenIds.add(c.id);
+            uniqueChannels.push({ ...c, name: normalizeName(c.name) })
+            seenIds.add(c.id)
           }
-        });
-        state.list = uniqueChannels;
+        })
+        state.list = uniqueChannels
 
         if (!state.currentChannelId) {
-          const general = state.list.find(c => c.name === 'general');
-          state.currentChannelId = general?.id || null;
+          const general = state.list.find(c => c.name === 'general')
+          state.currentChannelId = general?.id || null
         }
       })
       .addCase(fetchChannelsAsync.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        state.loading = false
+        state.error = action.payload
       })
 
       // === ADD CHANNEL ===
       .addCase(addChannelAsync.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loading = true
+        state.error = null
       })
       .addCase(addChannelAsync.fulfilled, (state, action) => {
-        state.loading = false;
-        const { id, name, removable } = action.payload;
-        const channelName = normalizeName(name);
+        state.loading = false
+        const { id, name, removable } = action.payload
+        const channelName = normalizeName(name)
 
         // ✅ Перед добавлением — убираем старый с таким же id
-        state.list = state.list.filter(c => c.id !== id);
-        state.list.push({ id, name: channelName, removable });
-        state.currentChannelId = id;
+        state.list = state.list.filter(c => c.id !== id)
+        state.list.push({ id, name: channelName, removable })
+        state.currentChannelId = id
       })
       .addCase(addChannelAsync.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        state.loading = false
+        state.error = action.payload
       })
 
       // === RENAME CHANNEL ===
       .addCase(renameChannelAsync.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loading = true
+        state.error = null
       })
       .addCase(renameChannelAsync.fulfilled, (state, action) => {
-        state.loading = false;
-        const { id, name } = action.payload;
-        const channel = state.list.find(c => c.id === id);
+        state.loading = false
+        const { id, name } = action.payload
+        const channel = state.list.find(c => c.id === id)
         if (channel) {
-          channel.name = normalizeName(name);
+          channel.name = normalizeName(name)
         }
       })
       .addCase(renameChannelAsync.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        state.loading = false
+        state.error = action.payload
       })
 
       // === REMOVE CHANNEL ===
       .addCase(removeChannelAsync.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loading = true
+        state.error = null
       })
       .addCase(removeChannelAsync.fulfilled, (state, action) => {
-        state.loading = false;
-        state.list = state.list.filter(c => c.id !== action.payload);
+        state.loading = false
+        state.list = state.list.filter(c => c.id !== action.payload)
         if (state.currentChannelId === action.payload) {
-          const general = state.list.find(c => c.name === 'general');
-          state.currentChannelId = general ? general.id : (state.list[0]?.id || null);
+          const general = state.list.find(c => c.name === 'general')
+          state.currentChannelId = general ? general.id : (state.list[0]?.id || null)
         }
       })
       .addCase(removeChannelAsync.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
+        state.loading = false
+        state.error = action.payload
+      })
   },
-});
+})
 
 export const {
   addChannel,
   removeChannel,
   renameChannel,
   setCurrentChannelId,
-} = channelsSlice.actions;
+} = channelsSlice.actions
 
-export default channelsSlice.reducer;
+export default channelsSlice.reducer

@@ -48,22 +48,22 @@ export const useChatApi = (socket) => {
       socket.off('removeChannel', handleRemoveChannel)
       socket.off('renameChannel', handleRenameChannel)
       socket.off('channelError', handleChannelError)
-    };
-  }, [socket, dispatch, handleApiError]);
+    }
+  }, [socket, dispatch, handleApiError])
 
   // === Обработчики сообщений ===
   const setupMessagesHandlers = useCallback(() => {
-    if (!socket) return () => {};
+    if (!socket) return () => {}
 
     const handleNewMessage = (payload) => {
       dispatch(addMessageAction(payload))
-    };
+    }
 
     socket.on('newMessage', handleNewMessage)
 
     return () => {
       socket.off('newMessage', handleNewMessage)
-    };
+    }
   }, [socket, dispatch])
 
 

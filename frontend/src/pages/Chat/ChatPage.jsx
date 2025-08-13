@@ -11,7 +11,7 @@ const ChatPage = () => {
   const handleLogout = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('username')
-    window.location.reload() // или navigate('/login')
+    window.location.reload()
   }
 
   return (

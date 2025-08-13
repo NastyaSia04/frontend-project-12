@@ -53,98 +53,98 @@ const ChatWindowContainer = () => {
         await sendMessage(msg);
       }
       setOfflineMessages([]);
-      toast.success(t('notifications.offlineMessagesSent'));
+      toast.success(t('notifications.offlineMessagesSent'))
     } catch (err) {
-      toast.error(t('notifications.offlineMessagesSendError'));
-      console.error('Не удалось отправить некоторые сообщения:', err);
+      toast.error(t('notifications.offlineMessagesSendError'))
+      console.error('Не удалось отправить некоторые сообщения:', err)
     } finally {
-      setIsSending(false);
+      setIsSending(false)
     }
-  }, [offlineMessages, sendMessage, t]);
+  }, [offlineMessages, sendMessage, t])
   
   useEffect(() => {
-    currentChannelIdRef.current = currentChannelId;
+    currentChannelIdRef.current = currentChannelId
   }, [currentChannelId])
 
   // Инициализация чата
   useEffect(() => {
     const initializeChat = async () => {
       try {
-        const channelsAction = await getChannels();
+        const channelsAction = await getChannels()
 
         if (!channelsAction || !channelsAction.payload) {
-          throw new Error('Не удалось загрузить каналы: пустой ответ');
+          throw new Error('Не удалось загрузить каналы: пустой ответ')
         }
 
-        const channels = channelsAction.payload;
+        const channels = channelsAction.payload
 
         if (!currentChannelIdRef.current) {
-          const generalChannel = channels.find(channel => channel.name === 'general');
+          const generalChannel = channels.find(channel => channel.name === 'general')
           if (generalChannel) {
-            dispatch(setCurrentChannelId(generalChannel.id));
+            dispatch(setCurrentChannelId(generalChannel.id))
           }
         }
         
-        await getMessages();
+        await getMessages()
       } catch (error) {
         console.error('Ошибка при загрузке чата:', error)
         handleApiError(error, { defaultMessageKey: 'notifications.chatLoadError' })
       }
-    };
+    }
 
-    initializeChat();
+    initializeChat()
     
     // При подключении сокета перезагружаем данные
     const handleConnect = () => {
-      getMessages();
-      getChannels();
-    };
+      getMessages()
+      getChannels()
+    }
 
-    socket?.on('connect', handleConnect);
-    window.addEventListener('online', sendOfflineMessages);
+    socket?.on('connect', handleConnect)
+    window.addEventListener('online', sendOfflineMessages)
     
     return () => {
-      socket?.off('connect', handleConnect);
-      window.removeEventListener('online', sendOfflineMessages);
-    };
-  }, [dispatch, sendOfflineMessages, getChannels, getMessages, socket, t, handleApiError]);
+      socket?.off('connect', handleConnect)
+      window.removeEventListener('online', sendOfflineMessages)
+    }
+  }, [dispatch, sendOfflineMessages, getChannels, getMessages, socket, t, handleApiError])
 
   // Настройка обработчиков сообщений
   useEffect(() => {
-    if (!socket) return;
+    if (!socket) return
     
-    const cleanupMessages = setupMessagesHandlers();
-    return cleanupMessages;
-  }, [socket, setupMessagesHandlers]);
+    const cleanupMessages = setupMessagesHandlers()
+    return cleanupMessages
+  }, [socket, setupMessagesHandlers])
 
   // Отправка сообщения
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!message.trim()) return;
+    e.preventDefault()
+    if (!message.trim()) return
 
     const messageData = {
       body: message,
       channelId: currentChannel.id,
       username,
-    };
+    }
 
     try {
-      setIsSending(true);
+      setIsSending(true)
       
       if (!isOnline) {
-        setOfflineMessages((prev) => [...prev, messageData]);
-        toast.warn(t('notifications.messageSavedOffline'));
-        setMessage('');
-        return;
+        setOfflineMessages((prev) => [...prev, messageData])
+        toast.warn(t('notifications.messageSavedOffline'))
+        setMessage('')
+        return
       }
       
-      await sendMessage(messageData);
-      setMessage('');
+      await sendMessage(messageData)
+      setMessage('')
     } catch (error) {
       console.error('Ошибка отправки сообщения:', error)
       handleApiError(error, { defaultMessageKey: 'notifications.messageSendError' })
     } finally {
-      setIsSending(false);
+      setIsSending(false)
     }
   };
 
@@ -166,7 +166,7 @@ const ChatWindowContainer = () => {
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ChatWindowContainer;
+export default ChatWindowContainer

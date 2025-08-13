@@ -14,59 +14,59 @@ import useApi from '../../hooks/useApi'
 
 const ChannelsPanelContainer = () => {
   const { t } = useTranslation()
-  const dispatch = useDispatch();
-  const channels = useSelector(selectChannels);
-  const currentChannelId = useSelector(selectCurrentChannelId);
-  const { socket } = useApi();
+  const dispatch = useDispatch()
+  const channels = useSelector(selectChannels)
+  const currentChannelId = useSelector(selectCurrentChannelId)
+  const { socket } = useApi()
   const { 
     setupChannelsHandlers,
     getChannels
-  } = useChatApi(socket);
+  } = useChatApi(socket)
 
   // Настройка обработчиков каналов
   useEffect(() => {
-    if (!socket) return;
+    if (!socket) return
     
-    const cleanupChannels = setupChannelsHandlers();
+    const cleanupChannels = setupChannelsHandlers()
 
     // При подключении сокета загружаем каналы
     const handleConnect = () => {
-      getChannels();
-    };
+      getChannels()
+    }
 
-    socket.on('connect', handleConnect);
+    socket.on('connect', handleConnect)
 
     return () => {
-      cleanupChannels();
-      socket.off('connect', handleConnect);
-    };
-  }, [socket, setupChannelsHandlers, getChannels]);
+      cleanupChannels()
+      socket.off('connect', handleConnect)
+    }
+  }, [socket, setupChannelsHandlers, getChannels])
 
   // UI обработчики (остаются без изменений)
   const handleAddChannel = () => {
-    dispatch(openModal({ type: 'add' }));
-  };
+    dispatch(openModal({ type: 'add' }))
+  }
 
   const handleChannelClick = (channelId) => {
-    dispatch(setCurrentChannelId(channelId));
-  };
+    dispatch(setCurrentChannelId(channelId))
+  }
 
   const handleRemove = (channelId) => {
     dispatch(openModal({
       type: 'remove',
       extra: { channelId },
-    }));
-  };
+    }))
+  }
 
   const handleRename = (channelId) => {
-    const channel = channels.find(c => c.id === channelId);
+    const channel = channels.find(c => c.id === channelId)
     if (channel) {
       dispatch(openModal({
         type: 'rename',
         extra: { channelId, currentName: channel.name },
-      }));
+      }))
     }
-  };
+  }
 
   return (
     <div className='col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex'>
@@ -91,4 +91,4 @@ const ChannelsPanelContainer = () => {
   );
 };
 
-export default ChannelsPanelContainer;
+export default ChannelsPanelContainer

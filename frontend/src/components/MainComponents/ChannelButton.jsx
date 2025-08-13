@@ -11,9 +11,9 @@ const ChannelButton = ({
 }) => {
   const { t } = useTranslation()
   
-  console.log('ChannelButton props.channel:', channel);
-  const { id, name, removable } = channel;
-  const displayName = typeof name === 'object' && name !== null ? name.name : name;
+  console.log('ChannelButton props.channel:', channel)
+  const { id, name, removable } = channel
+  const displayName = typeof name === 'object' && name !== null ? name.name : name
 
   const isActive = id === currentChannelId
 

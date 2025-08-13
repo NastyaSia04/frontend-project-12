@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { getAuthHeaders } from './headers';
+import axios from 'axios'
+import { getAuthHeaders } from './headers'
 import { BASE_URL } from '../config'
 
 export const fetchMessages = () => {

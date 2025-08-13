@@ -35,9 +35,3 @@ const LoginFormContainer = () => {
 
 export default LoginFormContainer
 
-//useNavigate позволяет программно переходить по маршрутам, как будто пользователь кликнул по ссылке:
-//navigate('/login'); - редирект на страницу входа
-//navigate('/', { replace: true }); - перейти без добавления в историю браузера
-
-//setSubmitting(false) — сообщает Formik, что форма больше не в состоянии "отправки".
-//setStatus('ошибка') — позволяет передать текст ошибки
