@@ -9,7 +9,7 @@ start-backend:
 start:
 		make start-backend
 build:
-		rd /s /q frontend\dist
+		rm -rf frontend/dist
 		npm run build
 deploy:
 		git push render main
