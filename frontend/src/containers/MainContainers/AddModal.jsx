@@ -47,7 +47,7 @@ const AddModal = () => {
     <Modal title={t('channels.modal.addTitle')} onClose={handleClose}>
       <Formik
         initialValues={{ name: '' }}
-        validationSchema={channelSchema(t, existingChannelNames)}
+        validationSchema={channelSchema(existingChannelNames)}
         validateOnBlur={false}
         validateOnChange={false}
         onSubmit={handleSubmit}
@@ -56,6 +56,7 @@ const AddModal = () => {
           <AddChannelModal 
             {...formikProps}
             onHide={handleClose}
+            t={t}
           />
         )}
       </Formik>

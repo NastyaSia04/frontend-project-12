@@ -1,11 +1,11 @@
-import * as Yup from 'yup'
+import { string, object } from 'yup'
 
-const channelSchema = (t, existingChannelName) => Yup.object({
-  name: Yup.string()
-    .min(3, t('validation.minThree'))
-    .max(20, t('validation.maxTwenty'))
-    .notOneOf(existingChannelName, t('validation.channelExists'))
-    .required(t('validation.required')),
-})
+const channelSchema = (existingChannels = []) => object().shape({
+  name: string()
+    .required('validation.required')
+    .min(3, 'validation.minThree')
+    .max(20, 'validation.maxTwenty')
+    .notOneOf(existingChannels, 'validation.channelExists'),
+});
 
 export default channelSchema

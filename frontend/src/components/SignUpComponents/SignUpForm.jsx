@@ -11,7 +11,7 @@ const SignUpForm = ({ onSubmit }) => {
     <Formik
       initialValues={{ username: '', password: '', confirmPassword: '' }}
       onSubmit={onSubmit}
-      validationSchema={signUpSchema(t)}
+      validationSchema={signUpSchema}
     >
       {({ isSubmitting, errors, touched, submitCount }) => (
         <Form>
@@ -25,20 +25,16 @@ const SignUpForm = ({ onSubmit }) => {
               placeholder={t('validation.minThree')}
               autoComplete='username'
               required
-              className={
-                ((touched.username || submitCount > 0) && errors.username) ||
-                (submitCount > 0 && errors.confirmPassword)
-                  ? 'is-invalid'
-                  : ''
-              }
+              isInvalid={!!errors.username && (touched.username || submitCount > 0)}
               aria-describedby='usernameHelpBlock'
+              autoFocus
             />
             <BootstrapForm.Label htmlFor='username'>{t('signUp.username')}</BootstrapForm.Label>
-            <div className='invalid-tooltip'></div>
-            {(touched.username || submitCount > 0) && errors.username && !errors.confirmPassword && (
-              <div className='invalid-tooltip' placement='right'>
-                {errors.username}
-              </div>
+            
+            {(touched.username || submitCount > 0) && errors.username && (
+              <BootstrapForm.Control.Feedback type="invalid">
+                {t(errors.username)}
+              </BootstrapForm.Control.Feedback>
             )}
           </BootstrapForm.Group>
 
@@ -52,21 +48,17 @@ const SignUpForm = ({ onSubmit }) => {
               placeholder={t('validation.minSix')}
               autoComplete='new-password'
               required
-              className={
-                ((touched.password || submitCount > 0) && errors.password) ||
-                (submitCount > 0 && errors.confirmPassword)
-                  ? 'is-invalid'
-                  : ''
-              }
+              isInvalid={!!errors.password && (touched.password || submitCount > 0)}
               aria-describedby='passwordHelpBlock'
             />
-            <div className='invalid-tooltip'></div>
-            {(touched.password || submitCount > 0) && errors.password && !errors.confirmPassword && (
-              <div className='invalid-tooltip'>
-                {errors.password}
-              </div>
-            )}
+            
             <BootstrapForm.Label htmlFor='password'>{t('signUp.password')}</BootstrapForm.Label>
+            
+            {(touched.password || submitCount > 0) && errors.password && (
+              <BootstrapForm.Control.Feedback type="invalid">
+                {t(errors.password)}
+              </BootstrapForm.Control.Feedback>
+            )}
           </BootstrapForm.Group>
 
           {/* Поле confirmPassword */}
@@ -79,16 +71,15 @@ const SignUpForm = ({ onSubmit }) => {
               placeholder={t('validation.passwordsMustMatch')}
               autoComplete='new-password'
               required
-              className={
-                (touched.confirmPassword || submitCount > 0) && errors.confirmPassword
-                  ? 'is-invalid'
-                  : ''
-              }
+              isInvalid={!!errors.confirmPassword && (touched.confirmPassword || submitCount > 0)}
             />
-            <div className='invalid-tooltip'>
-              {(touched.confirmPassword || submitCount > 0) && errors.confirmPassword}
-            </div>
+            
             <BootstrapForm.Label htmlFor='confirmPassword'>{t('signUp.confirmPassword')}</BootstrapForm.Label>
+            {errors.confirmPassword && (touched.confirmPassword || submitCount > 0) && (
+              <BootstrapForm.Control.Feedback type="invalid">
+                {t(errors.confirmPassword)}
+              </BootstrapForm.Control.Feedback>
+            )}
           </BootstrapForm.Group>
 
           <Button

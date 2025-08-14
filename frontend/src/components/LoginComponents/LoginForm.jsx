@@ -11,10 +11,11 @@ const LoginForm = ({ onSubmit }) => {
     <Formik
       initialValues={{ username: '', password: '' }}
       onSubmit={onSubmit}
-      validationSchema={loginSchema(t)}
+      validationSchema={loginSchema}
     >
-      {({ status, isSubmitting }) => (
+      {({ status, isSubmitting, errors, touched, submitCount }) => (
         <Form>
+          {/* Поле username */}
           <BootstrapForm.Group className='form-floating mb-3'>
             <Field
               as={BootstrapForm.Control}
@@ -24,10 +25,18 @@ const LoginForm = ({ onSubmit }) => {
               placeholder={t('login.username')}
               autoComplete='username'
               required
+              isInvalid={!!errors.username && (touched.username || submitCount > 0)}
+              autoFocus
             />
             <BootstrapForm.Label htmlFor='username'>{t('login.username')}</BootstrapForm.Label>
+            {errors.username && (touched.username || submitCount > 0) && (
+              <BootstrapForm.Control.Feedback type="invalid">
+                {t(errors.username)}
+              </BootstrapForm.Control.Feedback>
+            )}
           </BootstrapForm.Group>
 
+          {/* Поле password */}
           <BootstrapForm.Group className='form-floating mb-4'>
             <Field
               as={BootstrapForm.Control}
@@ -37,8 +46,14 @@ const LoginForm = ({ onSubmit }) => {
               placeholder={t('login.password')}
               autoComplete='current-password'
               required
+              isInvalid={!!errors.password && (touched.password || submitCount > 0)}
             />
             <BootstrapForm.Label htmlFor='password'>{t('login.password')}</BootstrapForm.Label>
+            {errors.password && (touched.password || submitCount > 0) && (
+              <BootstrapForm.Control.Feedback type="invalid">
+                {t(errors.password)}
+              </BootstrapForm.Control.Feedback>
+            )}
           </BootstrapForm.Group>
 
           {status && <Alert variant='danger'>{status}</Alert>}

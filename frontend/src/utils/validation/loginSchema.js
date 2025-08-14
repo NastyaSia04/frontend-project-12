@@ -1,14 +1,10 @@
-import * as Yup from 'yup';
+import { string, object } from 'yup'
 
-const loginSchema = (t) => Yup.object().shape({
-  username: Yup.string()
-    .min(2, t('validation.minPasw'))
-    .max(20, t('validation.maxPasw'))
-    .required(t('validation.required')),
-  password: Yup.string()
-    .min(2, t('validation.minPasw'))
-    .max(20, t('validation.maxPasw'))
-    .required(t('validation.required')),
+export default object().shape({
+  username: string()
+    .required('validation.required')
+    .min(3, 'validation.minThree')
+    .max(20, 'validation.maxTwenty'),
+  password: string()
+    .required('validation.required')
 })
-
-export default loginSchema
