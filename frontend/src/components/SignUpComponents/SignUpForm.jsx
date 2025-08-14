@@ -33,7 +33,7 @@ const SignUpForm = ({ onSubmit }) => {
               }
               aria-describedby='usernameHelpBlock'
             />
-            <BootstrapForm.Label>{t('signUp.username')}</BootstrapForm.Label>
+            <BootstrapForm.Label htmlFor='username'>{t('signUp.username')}</BootstrapForm.Label>
             <div className='invalid-tooltip'></div>
             {(touched.username || submitCount > 0) && errors.username && !errors.confirmPassword && (
               <div className='invalid-tooltip' placement='right'>
@@ -66,7 +66,7 @@ const SignUpForm = ({ onSubmit }) => {
                 {errors.password}
               </div>
             )}
-            <BootstrapForm.Label>{t('signUp.password')}</BootstrapForm.Label>
+            <BootstrapForm.Label htmlFor='password'>{t('signUp.password')}</BootstrapForm.Label>
           </BootstrapForm.Group>
 
           {/* Поле confirmPassword */}
@@ -88,7 +88,7 @@ const SignUpForm = ({ onSubmit }) => {
             <div className='invalid-tooltip'>
               {(touched.confirmPassword || submitCount > 0) && errors.confirmPassword}
             </div>
-            <BootstrapForm.Label>{t('signUp.confirmPassword')}</BootstrapForm.Label>
+            <BootstrapForm.Label htmlFor='confirmPassword'>{t('signUp.confirmPassword')}</BootstrapForm.Label>
           </BootstrapForm.Group>
 
           <Button

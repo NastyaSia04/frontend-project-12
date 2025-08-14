@@ -25,7 +25,7 @@ const LoginForm = ({ onSubmit }) => {
               autoComplete='username'
               required
             />
-            <BootstrapForm.Label>{t('login.username')}</BootstrapForm.Label>
+            <BootstrapForm.Label htmlFor='username'>{t('login.username')}</BootstrapForm.Label>
           </BootstrapForm.Group>
 
           <BootstrapForm.Group className='form-floating mb-4'>
@@ -38,7 +38,7 @@ const LoginForm = ({ onSubmit }) => {
               autoComplete='current-password'
               required
             />
-            <BootstrapForm.Label>{t('login.password')}</BootstrapForm.Label>
+            <BootstrapForm.Label htmlFor='password'>{t('login.password')}</BootstrapForm.Label>
           </BootstrapForm.Group>
 
           {status && <Alert variant='danger'>{status}</Alert>}
