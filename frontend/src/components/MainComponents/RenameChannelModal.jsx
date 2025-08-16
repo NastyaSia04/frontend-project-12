@@ -12,12 +12,12 @@ const RenameChannelModal = ({
   handleSubmit,
   isSubmitting,
   onHide,
-  submitCount
+  submitCount,
 }) => {
   const { t } = useTranslation()
 
   const inputRef = useRef(null)
-  
+
   useEffect(() => {
     inputRef.current?.focus()
     inputRef.current?.select()
@@ -31,7 +31,7 @@ const RenameChannelModal = ({
           type="text"
           ref={inputRef}
           className={classNames('form-control', 'mb-2', {
-            'is-invalid': (touched.name || submitCount > 0) && errors.name
+            'is-invalid': (touched.name || submitCount > 0) && errors.name,
           })}
           name="name"
           value={values.name}

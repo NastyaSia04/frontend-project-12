@@ -12,12 +12,12 @@ const AddChannelModal = ({
   handleSubmit,
   isSubmitting,
   onHide,
-  submitCount
+  submitCount,
 }) => {
   const { t } = useTranslation()
 
   const inputRef = useRef(null)
-  
+
   useEffect(() => {
     inputRef.current?.focus()
   }, [])
@@ -30,14 +30,14 @@ const AddChannelModal = ({
           type="text"
           ref={inputRef}
           className={classNames('form-control', 'mb-2', {
-            'is-invalid': (touched.name || submitCount > 0) && errors.name
+            'is-invalid': (touched.name || submitCount > 0) && errors.name,
           })}
           name="name"
           value={values.name}
           onChange={handleChange}
           onBlur={handleBlur}
           placeholder={t('channels.modal.placeholder')}
-          aria-describedby='nameHelpBlock'
+          aria-describedby="nameHelpBlock"
         />
         <label htmlFor="name" className="visually-hidden">
           {t('channels.modal.label')}

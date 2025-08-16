@@ -1,4 +1,3 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 const RemoveChannelModal = ({ onConfirm, onCancel, isDeleting }) => {
@@ -6,19 +5,19 @@ const RemoveChannelModal = ({ onConfirm, onCancel, isDeleting }) => {
 
   return (
     <>
-      <p className='lead'>{t('channels.modal.confirmDelete')}</p>
-      <div className='d-flex justify-content-end'>
+      <p className="lead">{t('channels.modal.confirmDelete')}</p>
+      <div className="d-flex justify-content-end">
         <button
-          type='button'
-          className='btn btn-secondary me-2'
+          type="button"
+          className="btn btn-secondary me-2"
           onClick={onCancel}
           disabled={isDeleting}
         >
           {t('channels.modal.cancel')}
         </button>
         <button
-          type='button'
-          className='btn btn-danger'
+          type="button"
+          className="btn btn-danger"
           onClick={onConfirm}
           disabled={isDeleting}
         >

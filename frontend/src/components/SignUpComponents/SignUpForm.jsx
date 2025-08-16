@@ -1,4 +1,3 @@
-import React from 'react'
 import { Formik, Form, Field } from 'formik'
 import { Form as BootstrapForm, Button } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
@@ -16,21 +15,20 @@ const SignUpForm = ({ onSubmit }) => {
       {({ isSubmitting, errors, touched, submitCount }) => (
         <Form>
           {/* Поле username */}
-          <BootstrapForm.Group className='form-floating mb-3'>
+          <BootstrapForm.Group className="form-floating mb-3">
             <Field
               as={BootstrapForm.Control}
-              type='text'
-              name='username'
-              id='username'
+              type="text"
+              name="username"
+              id="username"
               placeholder={t('validation.minThree')}
-              autoComplete='username'
+              autoComplete="username"
               required
               isInvalid={!!errors.username && (touched.username || submitCount > 0)}
-              aria-describedby='usernameHelpBlock'
+              aria-describedby="usernameHelpBlock"
               autoFocus
             />
-            <BootstrapForm.Label htmlFor='username'>{t('signUp.username')}</BootstrapForm.Label>
-            
+            <BootstrapForm.Label htmlFor="username">{t('signUp.username')}</BootstrapForm.Label>
             {(touched.username || submitCount > 0) && errors.username && (
               <BootstrapForm.Control.Feedback type="invalid">
                 {t(errors.username)}
@@ -39,21 +37,19 @@ const SignUpForm = ({ onSubmit }) => {
           </BootstrapForm.Group>
 
           {/* Поле password */}
-          <BootstrapForm.Group className='form-floating mb-3'>
+          <BootstrapForm.Group className="form-floating mb-3">
             <Field
               as={BootstrapForm.Control}
-              type='password'
-              name='password'
-              id='password'
+              type="password"
+              name="password"
+              id="password"
               placeholder={t('validation.minSix')}
-              autoComplete='new-password'
+              autoComplete="new-password"
               required
               isInvalid={!!errors.password && (touched.password || submitCount > 0)}
-              aria-describedby='passwordHelpBlock'
+              aria-describedby="passwordHelpBlock"
             />
-            
-            <BootstrapForm.Label htmlFor='password'>{t('signUp.password')}</BootstrapForm.Label>
-            
+            <BootstrapForm.Label htmlFor="password">{t('signUp.password')}</BootstrapForm.Label>
             {(touched.password || submitCount > 0) && errors.password && (
               <BootstrapForm.Control.Feedback type="invalid">
                 {t(errors.password)}
@@ -62,19 +58,18 @@ const SignUpForm = ({ onSubmit }) => {
           </BootstrapForm.Group>
 
           {/* Поле confirmPassword */}
-          <BootstrapForm.Group className='form-floating mb-4'>
+          <BootstrapForm.Group className="form-floating mb-4">
             <Field
               as={BootstrapForm.Control}
-              type='password'
-              name='confirmPassword'
-              id='confirmPassword'
+              type="password"
+              name="confirmPassword"
+              id="confirmPassword"
               placeholder={t('validation.passwordsMustMatch')}
-              autoComplete='new-password'
+              autoComplete="new-password"
               required
               isInvalid={!!errors.confirmPassword && (touched.confirmPassword || submitCount > 0)}
             />
-            
-            <BootstrapForm.Label htmlFor='confirmPassword'>{t('signUp.confirmPassword')}</BootstrapForm.Label>
+            <BootstrapForm.Label htmlFor="confirmPassword">{t('signUp.confirmPassword')}</BootstrapForm.Label>
             {errors.confirmPassword && (touched.confirmPassword || submitCount > 0) && (
               <BootstrapForm.Control.Feedback type="invalid">
                 {t(errors.confirmPassword)}
@@ -83,9 +78,9 @@ const SignUpForm = ({ onSubmit }) => {
           </BootstrapForm.Group>
 
           <Button
-            type='submit'
-            variant='outline-primary'
-            className='w-100'
+            type="submit"
+            variant="outline-primary"
+            className="w-100"
             disabled={isSubmitting}
           >
             {t('signUp.submit')}
