@@ -56,7 +56,6 @@ const AddModal = () => {
           <AddChannelModal 
             {...formikProps}
             onHide={handleClose}
-            t={t}
           />
         )}
       </Formik>

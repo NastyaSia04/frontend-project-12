@@ -6,11 +6,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import 'react-toastify/dist/ReactToastify.css'
 import './index.css'
 
-
-init().then((app) => {
-  createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {app}
+    {init()}
   </StrictMode>,
   )
-})

@@ -23,6 +23,7 @@
     "rename": "Переименовать",
     "modal": {
       "placeholder": "Введите имя канала",
+      "newNamePlaceholder": "Введите новое имя",
       "label": "Имя канала",
       "cancel": "Отменить",
       "submit": "Отправить",

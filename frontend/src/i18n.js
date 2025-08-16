@@ -2,7 +2,7 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import ruTranslation from './locales/ru/translation.json'
 
-const i18nInitPromise = i18n
+i18n
   .use(initReactI18next)
   .init({
     resources: {
@@ -18,6 +18,5 @@ const i18nInitPromise = i18n
     },
   })
   
-  export { i18nInitPromise }
   export default i18n
   

@@ -49,7 +49,7 @@ const RenameModal = ({ channelId, currentName }) => {
     <Modal title={t('channels.modal.renameTitle')} onClose={handleClose}>
       <Formik
         initialValues={{ name: currentName }}
-        validationSchema={channelSchema(t, existingChannelNames)}
+        validationSchema={channelSchema(existingChannelNames)}
         validateOnBlur={false}
         validateOnChange={false}
         onSubmit={(values, actions) => handleSubmit(values.name, actions)}
