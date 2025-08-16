@@ -39,7 +39,9 @@ const LoginLayout = ({ onSubmit }) => {
                 <div className='card-footer p-4'>
                   <div className='text-center'>
                     <span>{t('login.noAccount')} </span>
-                    <Link to='/signup' data-testid='signup-link'>{t('login.signup')}</Link>
+                    
+                    <a href='/signup'>{t('login.signup')}</a>
+                    
                   </div>
                 </div>
               </div>
