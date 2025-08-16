@@ -11,7 +11,7 @@ import PrivateRoute from './router/PrivateRoute'
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename='/'>
       <Routes>
         <Route path='/login' element={<LoginPage />} />
         <Route path='/signup' element={<SignUpPage />} />

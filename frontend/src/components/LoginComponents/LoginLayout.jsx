@@ -1,7 +1,6 @@
 import React from 'react'
 import Navbar from '../SharedComponents/Navbar'
 import LoginForm from './LoginForm'
-import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 const LoginLayout = ({ onSubmit }) => {
