@@ -5,11 +5,13 @@ import LoginLayout from '../../components/LoginComponents/LoginLayout'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../../store/entities/userSlice'
 import { useApiError } from '../../hooks/useApiError'
+import { useTranslation } from 'react-i18next'
 
 const LoginFormContainer = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const handleApiError = useApiError()
+  const { t } = useTranslation()
   
   const handleSubmit = async (values, { setSubmitting, setStatus }) => {
     try {
@@ -22,7 +24,7 @@ const LoginFormContainer = () => {
       console.error('Ошибка авторизации:', error)
 
       handleApiError(error, {
-        setStatus,
+        setStatus: () => setStatus(t('login.errors.invalidCredentials')),
         defaultMessageKey: 'login.errors.invalidCredentials',
       })
     } finally {
