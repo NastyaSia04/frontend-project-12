@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  username: localStorage.getItem('username') || null,
+  username: null,
 }
 
 export const selectUsername = (state) => state.user.username
