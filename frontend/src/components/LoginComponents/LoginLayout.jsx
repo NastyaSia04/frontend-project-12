@@ -2,6 +2,7 @@ import React from 'react'
 import Navbar from '../SharedComponents/Navbar'
 import LoginForm from './LoginForm'
 import { useTranslation } from 'react-i18next'
+import avatarLogin from '../../assets/avatar-DIE1AEpS.jpg'
 
 const LoginLayout = ({ onSubmit }) => {
   const { t } = useTranslation()
@@ -21,7 +22,7 @@ const LoginLayout = ({ onSubmit }) => {
                   {/* Левая колонка с аватаркой */}
                   <div className='col-12 col-md-6 d-flex align-items-center justify-content-center'>
                     <img
-                      src='/assets/avatar-DIE1AEpS.jpg'
+                      src={avatarLogin}
                       className='rounded-circle'
                       alt={t('login.altLogin')}
                     />

@@ -2,6 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import Navbar from '../SharedComponents/Navbar'
 import SignUpForm from './SignUpForm'
+import avatarSignup from '../../assets/avatar_1-D7Cot-zE.jpg'
 
 const SignUpLayout = ({ onSubmit }) => {
   const { t } = useTranslation()
@@ -18,7 +19,7 @@ const SignUpLayout = ({ onSubmit }) => {
                 <div className='card-body d-flex flex-column flex-md-row justify-content-around align-items-center p-5'>
                   <div>
                     <img
-                      src='/assets/avatar_1-D7Cot-zE.jpg'
+                      src={avatarSignup}
                       className='rounded-circle'
                       alt={t('signUp.title')}
                     />
