@@ -1,4 +1,3 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import Navbar from '../../components/SharedComponents/Navbar'
 import ChannelsPanelContainer from '../../containers/MainContainers/ChannelsPanelContainer'
@@ -16,18 +15,18 @@ const ChatPage = () => {
 
   return (
     <ApiProvider>
-      <div className='h-100 bg-light'>
-        <div className='d-flex flex-column h-100'>
+      <div className="h-100 bg-light">
+        <div className="d-flex flex-column h-100">
           {/* Навигационная панель */}
           <Navbar>
-            <button type='button' className='btn btn-primary' onClick={handleLogout}>
+            <button type="button" className="btn btn-primary" onClick={handleLogout}>
               {t('navbar.exit')}
             </button>
           </Navbar>
 
           {/* Основной контент */}
-          <div className='container h-100 my-4 overflow-hidden rounded shadow'>
-            <div className='row h-100 bg-white flex-md-row'>
+          <div className="container h-100 my-4 overflow-hidden rounded shadow">
+            <div className="row h-100 bg-white flex-md-row">
 
               {/* Боковая панель с каналами */}
               <ChannelsPanelContainer />
@@ -39,7 +38,7 @@ const ChatPage = () => {
           </div>
         </div>
       </div>
-    <ModalRoot/>
+      <ModalRoot />
     </ApiProvider>
   )
 }

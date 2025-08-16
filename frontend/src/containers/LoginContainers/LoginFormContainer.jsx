@@ -1,4 +1,3 @@
-import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { login } from '../../api/auth'
 import LoginLayout from '../../components/LoginComponents/LoginLayout'
@@ -12,7 +11,7 @@ const LoginFormContainer = () => {
   const dispatch = useDispatch()
   const handleApiError = useApiError()
   const { t } = useTranslation()
-  
+
   const handleSubmit = async (values, { setSubmitting, setStatus }) => {
     try {
       const { token, username } = await login(values.username, values.password)
@@ -20,14 +19,16 @@ const LoginFormContainer = () => {
       localStorage.setItem('username', username)
       dispatch(setUser(username))
       navigate('/')
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Ошибка авторизации:', error)
 
       handleApiError(error, {
         setStatus: () => setStatus(t('login.errors.invalidCredentials')),
         defaultMessageKey: 'login.errors.invalidCredentials',
       })
-    } finally {
+    }
+    finally {
       setSubmitting(false)
     }
   }
@@ -36,4 +37,3 @@ const LoginFormContainer = () => {
 }
 
 export default LoginFormContainer
-

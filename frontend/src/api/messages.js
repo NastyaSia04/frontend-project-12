@@ -4,8 +4,8 @@ import { BASE_URL } from '../config'
 
 export const fetchMessages = () => {
   return axios.get(`${BASE_URL}/messages`, getAuthHeaders())
-    .then((response) => response.data)
-    .catch(error => {
+    .then(response => response.data)
+    .catch((error) => {
       console.error('Error fetching messages:', error)
       throw error
     })

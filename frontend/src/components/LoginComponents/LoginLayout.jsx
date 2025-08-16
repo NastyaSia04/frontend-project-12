@@ -38,8 +38,9 @@ const LoginLayout = ({ onSubmit }) => {
                 <div className="card-footer p-4">
                   <div className="text-center">
                     <span>
-                      {t('login.noAccount')} 
+                      {t('login.noAccount')}
                     </span>
+                    {' '}
                     <a href="/signup">{t('login.signup')}</a>
                   </div>
                 </div>

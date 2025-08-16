@@ -12,14 +12,14 @@ const initialState = {
 }
 
 // Селекторы
-export const selectChannels = (state) => state.channels.list
-export const selectCurrentChannelId = (state) => state.channels.currentChannelId
+export const selectChannels = state => state.channels.list
+export const selectCurrentChannelId = state => state.channels.currentChannelId
 export const selectCurrentChannel = createSelector(
-  [selectChannels, (state) => state.channels.currentChannelId],
-  (channels, currentId) => channels.find(c => c.id === currentId)
+  [selectChannels, state => state.channels.currentChannelId],
+  (channels, currentId) => channels.find(c => c.id === currentId),
 )
-export const selectChannelsLoading = (state) => state.channels.loading
-export const selectChannelsError = (state) => state.channels.error
+export const selectChannelsLoading = state => state.channels.loading
+export const selectChannelsError = state => state.channels.error
 
 // THUNK: получение каналов
 export const fetchChannelsAsync = createAsyncThunk(
@@ -28,14 +28,15 @@ export const fetchChannelsAsync = createAsyncThunk(
     try {
       const response = await axios.get(
         `${BASE_URL}/channels`,
-        getAuthHeaders()
+        getAuthHeaders(),
       )
-      return response.data;
-    } catch (error) {
+      return response.data
+    }
+    catch (error) {
       console.error('Error fetching channels:', error)
       return rejectWithValue(error.message)
     }
-  }
+  },
 )
 
 // THUNK: добавление канала
@@ -46,15 +47,16 @@ export const addChannelAsync = createAsyncThunk(
       const response = await axios.post(
         `${BASE_URL}/channels`,
         { name },
-        getAuthHeaders()
+        getAuthHeaders(),
       )
       console.log('Добавленный канал из API:', response.data)
       return response.data
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error adding channel:', error)
       return rejectWithValue(error.message)
     }
-  }
+  },
 )
 
 // THUNK: переименование канала
@@ -65,14 +67,15 @@ export const renameChannelAsync = createAsyncThunk(
       const response = await axios.patch(
         `${BASE_URL}/channels/${id}`,
         { name },
-        getAuthHeaders()
+        getAuthHeaders(),
       )
       return response.data
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error renaming channel:', error)
       return rejectWithValue(error.message)
     }
-  }
+  },
 )
 
 // THUNK: удаление канала
@@ -83,17 +86,18 @@ export const removeChannelAsync = createAsyncThunk(
       await deleteChannelMessages(channelId)
       await axios.delete(
         `${BASE_URL}/channels/${channelId}`,
-        getAuthHeaders()
+        getAuthHeaders(),
       )
       return channelId
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error removing channel:', error)
       return rejectWithValue(error.message)
     }
-  }
+  },
 )
 
-const normalizeName = (name) =>
+const normalizeName = name =>
   typeof name === 'object' && name !== null ? name.name : name
 
 const channelsSlice = createSlice({

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import { useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Formik } from 'formik'
@@ -16,7 +16,7 @@ const AddModal = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const existingChannelNames = useSelector(
-    state => state.channels.list.map(channel => channel.name)
+    state => state.channels.list.map(channel => channel.name),
   )
 
   const handleClose = useCallback(() => {
@@ -29,16 +29,18 @@ const AddModal = () => {
       await dispatch(addChannelAsync(cleanedName)).unwrap()
       toast.success(t('notifications.channelCreated'))
       handleClose()
-    } catch (err) {
-      console.error('Ошибка добавления канала:',err)
+    }
+    catch (err) {
+      console.error('Ошибка добавления канала:', err)
       toast.error(t('notifications.networkError'))
-    } finally {
+    }
+    finally {
       setSubmitting(false)
     }
   }, [dispatch, handleClose, t])
 
   useEffect(() => {
-    const handleKey = (e) => e.key === 'Escape' && handleClose()
+    const handleKey = e => e.key === 'Escape' && handleClose()
     document.addEventListener('keydown', handleKey)
     return () => document.removeEventListener('keydown', handleKey)
   }, [handleClose])
@@ -52,15 +54,15 @@ const AddModal = () => {
         validateOnChange={false}
         onSubmit={handleSubmit}
       >
-        {(formikProps) => (
-          <AddChannelModal 
+        {formikProps => (
+          <AddChannelModal
             {...formikProps}
             onHide={handleClose}
           />
         )}
       </Formik>
     </Modal>,
-    document.body
+    document.body,
   )
 }
 

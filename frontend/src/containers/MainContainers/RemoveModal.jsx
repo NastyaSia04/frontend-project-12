@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import { useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -11,7 +11,7 @@ import { closeModal } from '../../store/entities/uiSlice'
 const RemoveModal = ({ channelId }) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const { loading: isDeleting } = useSelector((state) => state.channels)
+  const { loading: isDeleting } = useSelector(state => state.channels)
 
   const handleClose = useCallback(() => {
     dispatch(closeModal())
@@ -19,12 +19,13 @@ const RemoveModal = ({ channelId }) => {
 
   const handleConfirm = useCallback(async () => {
     if (!channelId) return
-    
+
     try {
       await dispatch(removeChannelAsync(channelId)).unwrap()
       toast.success(t('notifications.channelRemoved'))
       handleClose()
-    } catch (err) {
+    }
+    catch (err) {
       console.error('Ошибка удаления канала:', err)
       toast.error(t('notifications.networkError'))
     }
@@ -47,7 +48,7 @@ const RemoveModal = ({ channelId }) => {
         isDeleting={isDeleting}
       />
     </Modal>,
-    document.body
+    document.body,
   )
 }
 

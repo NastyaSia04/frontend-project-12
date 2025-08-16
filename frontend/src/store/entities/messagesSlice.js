@@ -9,13 +9,13 @@ const initialState = {
   error: null,
 }
 
-// Селекторы 
-export const selectMessages = (state) => state.messages.list
-export const selectMessagesLoading = (state) => state.messages.loading
-export const selectMessagesError = (state) => state.messages.error
+// Селекторы
+export const selectMessages = state => state.messages.list
+export const selectMessagesLoading = state => state.messages.loading
+export const selectMessagesError = state => state.messages.error
 export const selectMessagesByChannelId = createSelector(
   [selectMessages, (state, channelId) => channelId],
-  (messages, channelId) => messages.filter(m => m.channelId === channelId)
+  (messages, channelId) => messages.filter(m => m.channelId === channelId),
 )
 
 // Thunk'и
@@ -25,14 +25,15 @@ export const fetchMessagesAsync = createAsyncThunk(
     try {
       const response = await axios.get(
         `${BASE_URL}/messages`,
-        getAuthHeaders()
+        getAuthHeaders(),
       )
       return response.data
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error fetching messages:', error)
       return rejectWithValue(error.message)
     }
-  }
+  },
 )
 
 export const sendMessageAsync = createAsyncThunk(
@@ -42,14 +43,15 @@ export const sendMessageAsync = createAsyncThunk(
       const response = await axios.post(
         `${BASE_URL}/messages`,
         messageData,
-        getAuthHeaders()
+        getAuthHeaders(),
       )
       return response.data
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error sending message:', error)
       return rejectWithValue(error.message)
     }
-  }
+  },
 )
 
 // Добавлен новый thunk для удаления сообщений канала
@@ -59,14 +61,15 @@ export const removeChannelMessagesAsync = createAsyncThunk(
     try {
       await axios.delete(
         `${BASE_URL}/messages/channel/${channelId}`,
-        getAuthHeaders()
+        getAuthHeaders(),
       )
       return channelId // Возвращаем ID канала для обработки в редюсере
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error deleting channel messages:', error)
       return rejectWithValue(error.message)
     }
-  }
+  },
 )
 
 const messagesSlice = createSlice({
@@ -122,9 +125,9 @@ const messagesSlice = createSlice({
   },
 })
 
-export const { 
+export const {
   addMessage,
-  removeChannelMessages 
+  removeChannelMessages,
 } = messagesSlice.actions
 
 export default messagesSlice.reducer

@@ -1,4 +1,4 @@
-import React, { createContext, useRef, useState, useEffect } from 'react'
+import { createContext, useRef, useState, useEffect } from 'react'
 import { io } from 'socket.io-client'
 import axios from 'axios'
 import { BASE_URL } from '../config'
@@ -29,14 +29,14 @@ export const ApiProvider = ({ children }) => {
       socket.disconnect()
     }
   }, [])
-  
-  
+
   const sendMessage = async (messageData) => {
     try {
       // Отправка сообщения через REST API
       await axios.post(`${BASE_URL}/messages`, messageData, getAuthHeaders())
       // Сервер сам рассылает событие newMessage через WebSocket другим клиентам
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Ошибка при отправке сообщения', error)
     }
   }
@@ -46,7 +46,8 @@ export const ApiProvider = ({ children }) => {
       sendMessage,
       socket: socketRef.current,
       connected,
-    }}>
+    }}
+    >
       {children}
     </ApiContext.Provider>
   )

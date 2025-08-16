@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
@@ -26,21 +26,21 @@ const ChatWindowContainer = () => {
   const [message, setMessage] = useState('')
   const [isSending, setIsSending] = useState(false)
   const [offlineMessages, setOfflineMessages] = useState([])
-  
+
   const isOnline = useNetworkStatus()
   const { socket } = useApi()
-  const { 
+  const {
     sendMessage,
     setupMessagesHandlers,
     getChannels,
-    getMessages
+    getMessages,
   } = useChatApi(socket)
-  
+
   // Селекторы
   const currentChannelId = useSelector(selectCurrentChannelId)
   const currentChannel = useSelector(selectCurrentChannel)
   const username = useSelector(selectUsername)
-  const messages = useSelector((state) => selectMessagesByChannelId(state, currentChannelId))
+  const messages = useSelector(state => selectMessagesByChannelId(state, currentChannelId))
   const currentChannelIdRef = useRef(currentChannelId)
 
   // Отправка оффлайн-сообщений при восстановлении соединения
@@ -48,20 +48,22 @@ const ChatWindowContainer = () => {
     if (offlineMessages.length === 0) return
 
     try {
-      setIsSending(true);
+      setIsSending(true)
       for (const msg of offlineMessages) {
-        await sendMessage(msg);
+        await sendMessage(msg)
       }
-      setOfflineMessages([]);
+      setOfflineMessages([])
       toast.success(t('notifications.offlineMessagesSent'))
-    } catch (err) {
+    }
+    catch (err) {
       toast.error(t('notifications.offlineMessagesSendError'))
       console.error('Не удалось отправить некоторые сообщения:', err)
-    } finally {
+    }
+    finally {
       setIsSending(false)
     }
   }, [offlineMessages, sendMessage, t])
-  
+
   useEffect(() => {
     currentChannelIdRef.current = currentChannelId
   }, [currentChannelId])
@@ -84,16 +86,17 @@ const ChatWindowContainer = () => {
             dispatch(setCurrentChannelId(generalChannel.id))
           }
         }
-        
+
         await getMessages()
-      } catch (error) {
+      }
+      catch (error) {
         console.error('Ошибка при загрузке чата:', error)
         handleApiError(error, { defaultMessageKey: 'notifications.chatLoadError' })
       }
     }
 
     initializeChat()
-    
+
     // При подключении сокета перезагружаем данные
     const handleConnect = () => {
       getMessages()
@@ -102,7 +105,7 @@ const ChatWindowContainer = () => {
 
     socket?.on('connect', handleConnect)
     window.addEventListener('online', sendOfflineMessages)
-    
+
     return () => {
       socket?.off('connect', handleConnect)
       window.removeEventListener('online', sendOfflineMessages)
@@ -112,7 +115,7 @@ const ChatWindowContainer = () => {
   // Настройка обработчиков сообщений
   useEffect(() => {
     if (!socket) return
-    
+
     const cleanupMessages = setupMessagesHandlers()
     return cleanupMessages
   }, [socket, setupMessagesHandlers])
@@ -130,37 +133,39 @@ const ChatWindowContainer = () => {
 
     try {
       setIsSending(true)
-      
+
       if (!isOnline) {
-        setOfflineMessages((prev) => [...prev, messageData])
+        setOfflineMessages(prev => [...prev, messageData])
         toast.warn(t('notifications.messageSavedOffline'))
         setMessage('')
         return
       }
-      
+
       await sendMessage(messageData)
       setMessage('')
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Ошибка отправки сообщения:', error)
       handleApiError(error, { defaultMessageKey: 'notifications.messageSendError' })
-    } finally {
+    }
+    finally {
       setIsSending(false)
     }
-  };
+  }
 
   return (
-    <div className='col p-0 h-100'>
-      <div className='d-flex flex-column h-100'>
-        <ChatHeader 
-          channelName={currentChannel?.name || 'general'} 
+    <div className="col p-0 h-100">
+      <div className="d-flex flex-column h-100">
+        <ChatHeader
+          channelName={currentChannel?.name || 'general'}
           messageCount={messages.length}
         />
-        
+
         <Messages messages={messages} />
-        
+
         <MessageInput
           message={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={e => setMessage(e.target.value)}
           onSubmit={handleSubmit}
           disabled={isSending || !currentChannelId}
         />

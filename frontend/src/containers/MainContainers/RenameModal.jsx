@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import { useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Formik } from 'formik'
@@ -15,10 +15,10 @@ import { renameChannelAsync } from '../../store/entities/channelsSlice'
 const RenameModal = ({ channelId, currentName }) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
-  const existingChannelNames = useSelector(state => 
+  const existingChannelNames = useSelector(state =>
     state.channels.list
       .filter(channel => channel.id !== channelId)
-      .map(channel => channel.name)
+      .map(channel => channel.name),
   )
 
   const handleClose = useCallback(() => {
@@ -31,16 +31,18 @@ const RenameModal = ({ channelId, currentName }) => {
       await dispatch(renameChannelAsync({ id: channelId, name: cleanedName })).unwrap()
       toast.success(t('notifications.channelRenamed'))
       handleClose()
-    } catch (err) {
+    }
+    catch (err) {
       console.error('Ошибка при переименовании канала:', err)
       toast.error(t('notifications.networkError'))
-    } finally {
+    }
+    finally {
       setSubmitting(false)
     }
   }, [dispatch, channelId, handleClose, t])
 
   useEffect(() => {
-    const handleKey = (e) => e.key === 'Escape' && handleClose()
+    const handleKey = e => e.key === 'Escape' && handleClose()
     document.addEventListener('keydown', handleKey)
     return () => document.removeEventListener('keydown', handleKey)
   }, [handleClose])
@@ -54,15 +56,15 @@ const RenameModal = ({ channelId, currentName }) => {
         validateOnChange={false}
         onSubmit={(values, actions) => handleSubmit(values.name, actions)}
       >
-        {(formikProps) => (
-          <RenameChannelModal 
+        {formikProps => (
+          <RenameChannelModal
             {...formikProps}
             onHide={handleClose}
           />
         )}
       </Formik>
     </Modal>,
-    document.body
+    document.body,
   )
 }
 

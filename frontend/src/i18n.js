@@ -9,7 +9,7 @@ i18n
       ru: { translation: ruTranslation },
     },
     lng: 'ru', // дефолтная локаль
-    fallbackLng: 'ru',   // запасная локаль
+    fallbackLng: 'ru', // запасная локаль
     interpolation: {
       escapeValue: false, // для React не нужно экранирование
     },
@@ -17,6 +17,5 @@ i18n
       useSuspense: false, // у нас встроенные ресурсы — можно отключить suspense
     },
   })
-  
-  export default i18n
-  
+
+export default i18n

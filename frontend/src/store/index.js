@@ -10,7 +10,7 @@ const store = configureStore({
     messages: messagesReducer,
     user: userReducer,
     ui: uiReducer,
-  }
+  },
 })
 
 export default store

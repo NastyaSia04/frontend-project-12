@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector, useDispatch } from 'react-redux'
 import AddChannelButton from '../../components/MainComponents/AddChannelButton'
 import ChannelButton from '../../components/MainComponents/ChannelButton'
 import { openModal } from '../../store/entities/uiSlice'
-import { 
+import {
   setCurrentChannelId,
   selectChannels,
   selectCurrentChannelId,
@@ -18,15 +18,15 @@ const ChannelsPanelContainer = () => {
   const channels = useSelector(selectChannels)
   const currentChannelId = useSelector(selectCurrentChannelId)
   const { socket } = useApi()
-  const { 
+  const {
     setupChannelsHandlers,
-    getChannels
+    getChannels,
   } = useChatApi(socket)
 
   // Настройка обработчиков каналов
   useEffect(() => {
     if (!socket) return
-    
+
     const cleanupChannels = setupChannelsHandlers()
 
     // При подключении сокета загружаем каналы
@@ -69,14 +69,14 @@ const ChannelsPanelContainer = () => {
   }
 
   return (
-    <div className='col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex'>
-      <div className='d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4'>
+    <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
+      <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
         <b>{t('channels.title')}</b>
         <AddChannelButton onClick={handleAddChannel} />
       </div>
 
-      <ul id='channels-box' className='nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block'>
-        {channels.map((channel) => (
+      <ul id="channels-box" className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block">
+        {channels.map(channel => (
           <ChannelButton
             key={channel.id}
             channel={channel}
@@ -85,10 +85,10 @@ const ChannelsPanelContainer = () => {
             onRemove={handleRemove}
             onRename={handleRename}
           />
-        ))}  
+        ))}
       </ul>
     </div>
-  );
-};
+  )
+}
 
 export default ChannelsPanelContainer

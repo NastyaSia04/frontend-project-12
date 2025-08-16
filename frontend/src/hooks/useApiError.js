@@ -17,9 +17,11 @@ export const useApiError = () => {
 
     if (status === 401 && setStatus) {
       setStatus(t(defaultMessageKey))
-    } else if (status === 409 && setErrors && fieldErrors) {
+    }
+    else if (status === 409 && setErrors && fieldErrors) {
       setErrors(fieldErrors)
-    } else {
+    }
+    else {
       toast.error(t('notifications.dataLoadError'))
     }
   }, [t])

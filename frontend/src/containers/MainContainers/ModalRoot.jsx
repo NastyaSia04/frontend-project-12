@@ -11,7 +11,7 @@ const modals = {
 }
 
 const ModalRoot = () => {
-  const modal = useSelector((state) => state.ui.modal)
+  const modal = useSelector(state => state.ui.modal)
 
   useEffect(() => {
     if (modal) {

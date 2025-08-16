@@ -1,4 +1,3 @@
-import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { signup } from '../../api/auth'
 import SignUpLayout from '../../components/SignUpComponents/SignUpLayout'
@@ -21,7 +20,8 @@ const SignUpFormContainer = () => {
       localStorage.setItem('username', username)
       dispatch(setUser(username))
       navigate('/')
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Ошибка регистрации:', error)
 
       handleApiError(error, {
@@ -31,8 +31,9 @@ const SignUpFormContainer = () => {
           password: ' ',
           confirmPassword: t('signUp.errors.userExists'),
         },
-      })  
-    } finally {
+      })
+    }
+    finally {
       setSubmitting(false)
     }
   }

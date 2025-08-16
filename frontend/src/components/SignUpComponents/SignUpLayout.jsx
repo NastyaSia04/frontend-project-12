@@ -6,7 +6,7 @@ import avatarSignup from '../../assets/avatar_1-D7Cot-zE.jpg'
 const SignUpLayout = ({ onSubmit }) => {
   const { t } = useTranslation()
 
-  return(
+  return (
     <div className="h-100 bg-light">
       <div className="d-flex flex-column h-100" id="chat">
         <Navbar />

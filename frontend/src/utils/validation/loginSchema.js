@@ -6,5 +6,5 @@ export default object().shape({
     .min(3, 'validation.minThree')
     .max(20, 'validation.maxTwenty'),
   password: string()
-    .required('validation.required')
+    .required('validation.required'),
 })

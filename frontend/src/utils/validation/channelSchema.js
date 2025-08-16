@@ -6,6 +6,6 @@ const channelSchema = (existingChannels = []) => object().shape({
     .min(3, 'validation.minThree')
     .max(20, 'validation.maxTwenty')
     .notOneOf(existingChannels, 'validation.channelExists'),
-});
+})
 
 export default channelSchema
