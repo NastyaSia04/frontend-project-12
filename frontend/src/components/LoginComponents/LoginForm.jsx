@@ -1,7 +1,7 @@
 import React from 'react'
 import { Formik, Form, Field } from 'formik'
 import { Form as BootstrapForm, Button, Alert } from 'react-bootstrap'
-import loginSchema from '../../utils/validation/loginSchema'
+
 import { useTranslation } from 'react-i18next'
 
 const LoginForm = ({ onSubmit }) => {
@@ -11,9 +11,9 @@ const LoginForm = ({ onSubmit }) => {
     <Formik
       initialValues={{ username: '', password: '' }}
       onSubmit={onSubmit}
-      validationSchema={loginSchema}
+      
     >
-      {({ status, isSubmitting, errors, touched, submitCount }) => (
+      {({ status, isSubmitting, errors, touched }) => (
         <Form>
           {/* Поле username */}
           <BootstrapForm.Group className='form-floating mb-3'>
@@ -25,15 +25,13 @@ const LoginForm = ({ onSubmit }) => {
               placeholder={t('login.username')}
               autoComplete='username'
               required
-              isInvalid={!!errors.username && (touched.username || submitCount > 0)}
+              isInvalid={touched.username && !!errors.username}
               autoFocus
             />
             <BootstrapForm.Label htmlFor='username'>{t('login.username')}</BootstrapForm.Label>
-            {errors.username && (touched.username || submitCount > 0) && (
               <BootstrapForm.Control.Feedback type="invalid">
                 {t(errors.username)}
               </BootstrapForm.Control.Feedback>
-            )}
           </BootstrapForm.Group>
 
           {/* Поле password */}
@@ -46,14 +44,12 @@ const LoginForm = ({ onSubmit }) => {
               placeholder={t('login.password')}
               autoComplete='current-password'
               required
-              isInvalid={!!errors.password && (touched.password || submitCount > 0)}
+              isInvalid={touched.password && !!errors.password}
             />
             <BootstrapForm.Label htmlFor='password'>{t('login.password')}</BootstrapForm.Label>
-            {errors.password && (touched.password || submitCount > 0) && (
               <BootstrapForm.Control.Feedback type="invalid">
                 {t(errors.password)}
               </BootstrapForm.Control.Feedback>
-            )}
           </BootstrapForm.Group>
 
           {status && <Alert variant='danger'>{status}</Alert>}
