@@ -2,7 +2,7 @@ import { createSelector, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { getAuthHeaders } from '../../api/headers'
 import { BASE_URL } from '../../config'
-import { deleteChannelMessages } from '../../api/messages'
+import { removeChannelMessagesAsync } from './messagesSlice'
 
 const initialState = {
   list: [],
@@ -83,7 +83,7 @@ export const removeChannelAsync = createAsyncThunk(
   'channels/removeChannelAsync',
   async (channelId, { rejectWithValue }) => {
     try {
-      await deleteChannelMessages(channelId)
+      await removeChannelMessagesAsync(channelId)
       await axios.delete(
         `${BASE_URL}/channels/${channelId}`,
         getAuthHeaders(),
@@ -108,7 +108,7 @@ const channelsSlice = createSlice({
       const { id, name, removable } = action.payload
       const channelName = normalizeName(name)
 
-      // ✅ Удаляем старый канал с таким же id перед добавлением
+      // Удаляем старый канал с таким же id перед добавлением
       state.list = state.list.filter(c => c.id !== id)
       state.list.push({ id, name: channelName, removable })
     },
@@ -139,7 +139,7 @@ const channelsSlice = createSlice({
       })
       .addCase(fetchChannelsAsync.fulfilled, (state, action) => {
         state.loading = false
-        // ✅ Убираем дубликаты по id
+        // Убираем дубликаты по id
         const uniqueChannels = []
         const seenIds = new Set()
         action.payload.forEach((c) => {
@@ -170,7 +170,7 @@ const channelsSlice = createSlice({
         const { id, name, removable } = action.payload
         const channelName = normalizeName(name)
 
-        // ✅ Перед добавлением — убираем старый с таким же id
+        // Перед добавлением — убираем старый с таким же id
         state.list = state.list.filter(c => c.id !== id)
         state.list.push({ id, name: channelName, removable })
         state.currentChannelId = id
