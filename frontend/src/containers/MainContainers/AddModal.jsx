@@ -5,6 +5,7 @@ import { Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import filter from 'leo-profanity'
+import { createSelector } from '@reduxjs/toolkit'
 
 import channelSchema from '../../utils/validation/channelSchema'
 import AddChannelModal from '../../components/MainComponents/AddChannelModal'
@@ -13,14 +14,17 @@ import { closeModal } from '../../store/entities/uiSlice'
 import { addChannelAsync } from '../../store/entities/channelsSlice'
 import { useApiError } from '../../hooks/useApiError'
 
+const selectChannelNames = createSelector(
+  state => state.channels.list,
+  channels => channels.map(channel => channel.name),
+)
+
 const AddModal = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const handleApiError = useApiError()
 
-  const existingChannelNames = useSelector(
-    state => state.channels.list.map(channel => channel.name),
-  )
+  const existingChannelNames = useSelector(selectChannelNames)
 
   const handleClose = useCallback(() => {
     dispatch(closeModal())

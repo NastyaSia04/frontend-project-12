@@ -16,11 +16,11 @@ import { useApiError } from '../../hooks/useApiError'
 
 // Мемоизация селектора
 const selectExistingChannelNames = createSelector(
-  (state) => state.channels.list,
+  state => state.channels.list,
   (_, channelId) => channelId,
   (channels, channelId) => channels
     .filter(channel => channel.id !== channelId)
-    .map(channel => channel.name)
+    .map(channel => channel.name),
 )
 
 const RenameModal = ({ channelId, currentName }) => {
