@@ -26,6 +26,7 @@ const LoginFormContainer = () => {
       handleApiError(error, {
         setStatus: () => setStatus(t('login.errors.invalidCredentials')),
         defaultMessageKey: 'login.errors.invalidCredentials',
+        skipRedirect: true,
       })
     }
     finally {

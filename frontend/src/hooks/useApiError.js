@@ -6,7 +6,7 @@ export const useApiError = () => {
   const { t } = useTranslation()
 
   const handleApiError = useCallback((error, options = {}) => {
-    const { setStatus, setErrors, fieldErrors, defaultMessageKey } = options
+    const { setStatus, setErrors, fieldErrors, defaultMessageKey, skipRedirect } = options
 
     if (!navigator.onLine) {
       toast.error(t('notifications.networkError'))
@@ -16,8 +16,10 @@ export const useApiError = () => {
     const status = error.response?.status
 
     if (status === 401) {
-      localStorage.removeItem('token')
-      window.location.href = '/login'
+      if (!skipRedirect) {
+        localStorage.removeItem('token')
+        window.location.href = '/login'
+      }
 
       if (setStatus) {
         setStatus(t(defaultMessageKey))
