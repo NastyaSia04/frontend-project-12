@@ -21,7 +21,6 @@ const LoginForm = ({ onSubmit }) => {
               name="username"
               id="username"
               placeholder={t('login.username')}
-              autoComplete="username"
               required
               isInvalid={touched.username && !!errors.username}
               autoFocus
@@ -40,7 +39,6 @@ const LoginForm = ({ onSubmit }) => {
               name="password"
               id="password"
               placeholder={t('login.password')}
-              autoComplete="current-password"
               required
               isInvalid={touched.password && !!errors.password}
             />

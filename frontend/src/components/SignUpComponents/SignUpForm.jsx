@@ -22,7 +22,6 @@ const SignUpForm = ({ onSubmit }) => {
               name="username"
               id="username"
               placeholder={t('validation.minThree')}
-              autoComplete="username"
               required
               isInvalid={!!errors.username && (touched.username || submitCount > 0)}
               aria-describedby="usernameHelpBlock"
@@ -44,7 +43,6 @@ const SignUpForm = ({ onSubmit }) => {
               name="password"
               id="password"
               placeholder={t('validation.minSix')}
-              autoComplete="new-password"
               required
               isInvalid={!!errors.password && (touched.password || submitCount > 0)}
               aria-describedby="passwordHelpBlock"
@@ -65,7 +63,6 @@ const SignUpForm = ({ onSubmit }) => {
               name="confirmPassword"
               id="confirmPassword"
               placeholder={t('validation.passwordsMustMatch')}
-              autoComplete="new-password"
               required
               isInvalid={!!errors.confirmPassword && (touched.confirmPassword || submitCount > 0)}
             />

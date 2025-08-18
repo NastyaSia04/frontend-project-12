@@ -58,8 +58,8 @@
   },
   "notFound": {
     "title": "Страница не найдена",
-    "description": "Но вы можете {{link}}",
-    "linkText": "перейти на главную страницу"
+    "description": "Но вы можете перейти ",
+    "linkText": "на главную страницу"
   },
   "validation": {
     "minThree": "От 3 до 20 символов",
