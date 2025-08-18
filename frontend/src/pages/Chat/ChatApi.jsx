@@ -86,7 +86,7 @@ export const useChatApi = (socket) => {
 
   const getChannels = useCallback(async () => {
     try {
-      return await dispatch(fetchChannelsAsync())
+      return await dispatch(fetchChannelsAsync()).unwrap()
     }
     catch (error) {
       handleApiError(error, { defaultMessageKey: 'notifications.chatLoadError' })
@@ -95,7 +95,7 @@ export const useChatApi = (socket) => {
 
   const getMessages = useCallback(async () => {
     try {
-      return await dispatch(fetchMessagesAsync())
+      return await dispatch(fetchMessagesAsync()).unwrap()
     }
     catch (error) {
       handleApiError(error, { defaultMessageKey: 'notifications.chatLoadError' })

@@ -7,11 +7,13 @@ import Modal from '../../components/MainComponents/Modal'
 import RemoveChannelModal from '../../components/MainComponents/RemoveChannelModal'
 import { removeChannelAsync } from '../../store/entities/channelsSlice'
 import { closeModal } from '../../store/entities/uiSlice'
+import { useApiError } from '../../hooks/useApiError'
 
 const RemoveModal = ({ channelId }) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
   const { loading: isDeleting } = useSelector(state => state.channels)
+  const handleApiError = useApiError()
 
   const handleClose = useCallback(() => {
     dispatch(closeModal())
@@ -27,9 +29,9 @@ const RemoveModal = ({ channelId }) => {
     }
     catch (err) {
       console.error('Ошибка удаления канала:', err)
-      toast.error(t('notifications.networkError'))
+      handleApiError(err, { defaultMessageKey: 'notifications.networkError' })
     }
-  }, [dispatch, channelId, handleClose, t])
+  }, [dispatch, channelId, handleClose, t, handleApiError])
 
   useEffect(() => {
     const handleKey = (e) => {

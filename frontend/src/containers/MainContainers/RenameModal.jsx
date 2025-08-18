@@ -5,21 +5,31 @@ import { Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import filter from 'leo-profanity'
+import { createSelector } from '@reduxjs/toolkit'
 
 import channelSchema from '../../utils/validation/channelSchema'
 import RenameChannelModal from '../../components/MainComponents/RenameChannelModal'
 import Modal from '../../components/MainComponents/Modal'
 import { closeModal } from '../../store/entities/uiSlice'
 import { renameChannelAsync } from '../../store/entities/channelsSlice'
+import { useApiError } from '../../hooks/useApiError'
+
+// Мемоизация селектора
+const selectExistingChannelNames = createSelector(
+  (state) => state.channels.list,
+  (_, channelId) => channelId,
+  (channels, channelId) => channels
+    .filter(channel => channel.id !== channelId)
+    .map(channel => channel.name)
+)
 
 const RenameModal = ({ channelId, currentName }) => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
+  const handleApiError = useApiError()
+
   const existingChannelNames = useSelector(state =>
-    state.channels.list
-      .filter(channel => channel.id !== channelId)
-      .map(channel => channel.name),
-  )
+    selectExistingChannelNames(state, channelId))
 
   const handleClose = useCallback(() => {
     dispatch(closeModal())
@@ -34,12 +44,12 @@ const RenameModal = ({ channelId, currentName }) => {
     }
     catch (err) {
       console.error('Ошибка при переименовании канала:', err)
-      toast.error(t('notifications.networkError'))
+      handleApiError(err, { defaultMessageKey: 'notifications.networkError' })
     }
     finally {
       setSubmitting(false)
     }
-  }, [dispatch, channelId, handleClose, t])
+  }, [dispatch, channelId, handleClose, t, handleApiError])
 
   useEffect(() => {
     const handleKey = e => e.key === 'Escape' && handleClose()

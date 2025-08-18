@@ -34,7 +34,7 @@ export const fetchChannelsAsync = createAsyncThunk(
     }
     catch (error) {
       console.error('Error fetching channels:', error)
-      return rejectWithValue(error.message)
+      return rejectWithValue(error)
     }
   },
 )
@@ -54,7 +54,7 @@ export const addChannelAsync = createAsyncThunk(
     }
     catch (error) {
       console.error('Error adding channel:', error)
-      return rejectWithValue(error.message)
+      return rejectWithValue(error)
     }
   },
 )
@@ -73,7 +73,7 @@ export const renameChannelAsync = createAsyncThunk(
     }
     catch (error) {
       console.error('Error renaming channel:', error)
-      return rejectWithValue(error.message)
+      return rejectWithValue(error)
     }
   },
 )
@@ -92,7 +92,7 @@ export const removeChannelAsync = createAsyncThunk(
     }
     catch (error) {
       console.error('Error removing channel:', error)
-      return rejectWithValue(error.message)
+      return rejectWithValue(error)
     }
   },
 )

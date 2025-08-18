@@ -15,8 +15,13 @@ export const useApiError = () => {
 
     const status = error.response?.status
 
-    if (status === 401 && setStatus) {
-      setStatus(t(defaultMessageKey))
+    if (status === 401) {
+      localStorage.removeItem('token')
+      window.location.href = '/login'
+
+      if (setStatus) {
+        setStatus(t(defaultMessageKey))
+      }
     }
     else if (status === 409 && setErrors && fieldErrors) {
       setErrors(fieldErrors)

@@ -11,10 +11,13 @@ import AddChannelModal from '../../components/MainComponents/AddChannelModal'
 import Modal from '../../components/MainComponents/Modal'
 import { closeModal } from '../../store/entities/uiSlice'
 import { addChannelAsync } from '../../store/entities/channelsSlice'
+import { useApiError } from '../../hooks/useApiError'
 
 const AddModal = () => {
   const { t } = useTranslation()
   const dispatch = useDispatch()
+  const handleApiError = useApiError()
+
   const existingChannelNames = useSelector(
     state => state.channels.list.map(channel => channel.name),
   )
@@ -31,13 +34,13 @@ const AddModal = () => {
       handleClose()
     }
     catch (err) {
-      console.error('Ошибка добавления канала:', err)
-      toast.error(t('notifications.networkError'))
+      console.error('Ошибка при добавлении канала:', err)
+      handleApiError(err, { defaultMessageKey: 'notifications.networkError' })
     }
     finally {
       setSubmitting(false)
     }
-  }, [dispatch, handleClose, t])
+  }, [dispatch, handleClose, t, handleApiError])
 
   useEffect(() => {
     const handleKey = e => e.key === 'Escape' && handleClose()

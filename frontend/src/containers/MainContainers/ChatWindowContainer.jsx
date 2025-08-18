@@ -72,13 +72,11 @@ const ChatWindowContainer = () => {
   useEffect(() => {
     const initializeChat = async () => {
       try {
-        const channelsAction = await getChannels()
+        const channels = await getChannels()
 
-        if (!channelsAction || !channelsAction.payload) {
+        if (!channels || channels.length === 0) {
           throw new Error('Не удалось загрузить каналы: пустой ответ')
         }
-
-        const channels = channelsAction.payload
 
         if (!currentChannelIdRef.current) {
           const generalChannel = channels.find(channel => channel.name === 'general')
