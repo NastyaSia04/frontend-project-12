@@ -24,6 +24,7 @@ const LoginForm = ({ onSubmit }) => {
               required
               isInvalid={touched.username && !!errors.username}
               autoFocus
+              autoComplete = "off"
             />
             <BootstrapForm.Label htmlFor="username">{t('login.username')}</BootstrapForm.Label>
             <BootstrapForm.Control.Feedback type="invalid">
@@ -41,6 +42,7 @@ const LoginForm = ({ onSubmit }) => {
               placeholder={t('login.password')}
               required
               isInvalid={touched.password && !!errors.password}
+              autoComplete = "off"
             />
             <BootstrapForm.Label htmlFor="password">{t('login.password')}</BootstrapForm.Label>
             <BootstrapForm.Control.Feedback type="invalid">

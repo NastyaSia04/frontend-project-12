@@ -26,6 +26,7 @@ const SignUpForm = ({ onSubmit }) => {
               isInvalid={!!errors.username && (touched.username || submitCount > 0)}
               aria-describedby="usernameHelpBlock"
               autoFocus
+              autoComplete = "off"
             />
             <BootstrapForm.Label htmlFor="username">{t('signUp.username')}</BootstrapForm.Label>
             {(touched.username || submitCount > 0) && errors.username && (
@@ -46,6 +47,7 @@ const SignUpForm = ({ onSubmit }) => {
               required
               isInvalid={!!errors.password && (touched.password || submitCount > 0)}
               aria-describedby="passwordHelpBlock"
+              autoComplete = "off"
             />
             <BootstrapForm.Label htmlFor="password">{t('signUp.password')}</BootstrapForm.Label>
             {(touched.password || submitCount > 0) && errors.password && (
@@ -65,6 +67,7 @@ const SignUpForm = ({ onSubmit }) => {
               placeholder={t('validation.passwordsMustMatch')}
               required
               isInvalid={!!errors.confirmPassword && (touched.confirmPassword || submitCount > 0)}
+              autoComplete = "off"
             />
             <BootstrapForm.Label htmlFor="confirmPassword">{t('signUp.confirmPassword')}</BootstrapForm.Label>
             {errors.confirmPassword && (touched.confirmPassword || submitCount > 0) && (
